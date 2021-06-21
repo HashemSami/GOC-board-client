@@ -2,7 +2,12 @@ import { svgAppend } from "./setup/d3Utils";
 import { ChartOptions } from "./setup/models";
 import { barChart } from "./charts/barChart";
 
-export const d3Chart = (element: HTMLDivElement, width: number, height: number, data: any[]) => {
+export const d3Chart = (
+  element: HTMLDivElement,
+  width: number,
+  height: number,
+  data: any[]
+) => {
   const chartData = data;
   const getData = () => chartData;
 
@@ -20,6 +25,7 @@ export const d3Chart = (element: HTMLDivElement, width: number, height: number, 
   };
 
   return {
-    barChart: () => barChart(svg, getData(), getChartOptions()),
+    barChart: (data: { name: string; value: number }[]) =>
+      barChart(data, svg, getChartOptions()),
   };
 };

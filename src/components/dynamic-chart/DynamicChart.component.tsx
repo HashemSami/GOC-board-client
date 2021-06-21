@@ -4,11 +4,11 @@ import { DynamicChartContainer } from "./DynamicChart.styles";
 import { d3Chart } from "./d3-chart";
 
 const data = [
-  { height: "272", name: "Hashem" },
-  { height: "124", name: "Sami" },
-  { height: "200", name: "Moh" },
-  { height: "220", name: "Kareem" },
-  { height: "185", name: "Sara" },
+  { value: 272, name: "Hashem" },
+  { value: 124, name: "Sami" },
+  { value: 200, name: "Moh" },
+  { value: 220, name: "Kareem" },
+  { value: 185, name: "Sara" },
 ];
 
 interface DynamicChartProps {
@@ -25,10 +25,16 @@ const DynamicChart: FC<DynamicChartProps> = ({ width, height }) => {
     }
     const chart = d3Chart(chartDiv.current, width, height, data);
 
-    chart.barChart();
+    chart.barChart(data);
   });
 
-  return <DynamicChartContainer ref={chartDiv} width={width} height={height}></DynamicChartContainer>;
+  return (
+    <DynamicChartContainer
+      ref={chartDiv}
+      width={width}
+      height={height}
+    ></DynamicChartContainer>
+  );
 };
 
 export default DynamicChart;
