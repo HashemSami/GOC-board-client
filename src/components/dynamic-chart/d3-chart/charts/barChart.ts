@@ -1,14 +1,25 @@
-import { linearScale, bandScale, getMaxValue, generateBarXAxis, generateBarYAxis } from "../setup/d3Utils";
+import {
+  linearScale,
+  bandScale,
+  getMaxValue,
+  generateBarXAxis,
+  generateBarYAxis,
+  getMinValue,
+} from "../setup/d3Utils";
 import { ChartOptions } from "../setup/models";
 
-export const barChart = (data: { name: string; value: number }[], svg: d3.Selection<SVGGElement, unknown, null, undefined>, chartOptions: ChartOptions) => {
+export const barChart = (
+  data: { name: string; value: number }[],
+  svg: d3.Selection<SVGGElement, unknown, null, undefined>,
+  chartOptions: ChartOptions
+) => {
   const { width, height, margin } = chartOptions;
 
   // ------------------------------------------------------------
   // xAxis
   // will also do the scaling for the x values (the fields names)
   const x = bandScale(
-    data.map(d => d.name),
+    data.map((d) => d.name),
     [0, width]
   );
   x.padding(0.5);
@@ -23,15 +34,38 @@ export const barChart = (data: { name: string; value: number }[], svg: d3.Select
   // ------------------------------------------------------------
   // yAxis
   const max = getMaxValue(data);
+  const min = getMinValue(data);
   // here we will set the scale of our bar chart to fit all the data into
   // our visulaization
-  const y = linearScale([0, max ? max : 1000], [0, height]);
+  const y = linearScale(
+    [min ? min * 0.95 : 0, max ? max + 10 : 1000],
+    [height, 0]
+  );
 
   const yAxisCall = generateBarYAxis(y);
   // we need to call our yAxis generator on our svg
   // but we need to append them to a group to make both axis
   // show on the screen
   svg.append("g").call(yAxisCall);
+
+  // ------------------------------------------------------------
+  // generates axis labels
+  svg
+    .append("text")
+    .attr("x", width / 2)
+    .attr("y", height + 40)
+    .attr("text-anchor", "middle")
+    .text("Bar Chart Title");
+
+  svg
+    .append("text")
+    .attr("x", -(height / 2))
+    .attr("y", -40)
+    .attr("text-anchor", "middle")
+    // rotating the text will also rotate the x and the y axis
+    // that are belong to the text
+    .attr("transform", "rotate(-90)")
+    .text("Axis Title");
 
   // ------------------------------------------------------------
   // draw rects
@@ -44,6 +78,7 @@ export const barChart = (data: { name: string; value: number }[], svg: d3.Select
   // and the data eteration number in inside the attributes setters as a function
   // console.log(x("Hashem"));
   // console.log(x.bandwidth());
+  console.log(y(272));
   rects
     .enter()
     .append("rect")
@@ -51,9 +86,9 @@ export const barChart = (data: { name: string; value: number }[], svg: d3.Select
       const xVal = x(data.name);
       return xVal ? xVal : null;
     })
-    .attr("y", d => height - y(d.value))
+    .attr("y", (d) => y(d.value))
     .attr("width", x.bandwidth())
-    .attr("height", d => y(d.value))
+    .attr("height", (d) => height - y(d.value))
     .attr("fill", "red");
 
   // basic version
@@ -66,4 +101,8 @@ export const barChart = (data: { name: string; value: number }[], svg: d3.Select
   //     .attr("height", d)
   //     .attr("fill", "red");
   // });
+
+  return {
+    updateData: (newData: { name: string; value: number }[]) => {},
+  };
 };
