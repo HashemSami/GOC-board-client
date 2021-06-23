@@ -8,3 +8,12 @@ export interface ChartOptions {
     right: number;
   };
 }
+
+export interface BarChart {
+  updateData: (
+    newData: {
+      name: string;
+      value: number;
+    }[]
+  ) => void;
+}

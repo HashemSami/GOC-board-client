@@ -2,10 +2,14 @@ import { svgAppend } from "./setup/d3Utils";
 import { ChartOptions } from "./setup/models";
 import { barChart } from "./charts/barChart";
 
-export const d3Chart = (element: HTMLDivElement, width: number, height: number, data: { name: string; value: number }[]) => {
-  let chartData = data;
-  const getData = () => chartData;
-  const setData = (newData: { name: string; value: number }[]) => (chartData = [...newData]);
+export const d3Chart = (
+  element: HTMLDivElement,
+  width: number,
+  height: number
+) => {
+  // let chartData = data;
+  // const getData = () => chartData;
+  // const setData = (newData: { name: string; value: number }[]) => (chartData = [...newData]);
 
   // to seperate the data visulaization fro the eadge of
   // the canvas or the svg
@@ -18,11 +22,15 @@ export const d3Chart = (element: HTMLDivElement, width: number, height: number, 
   };
 
   const svgCanv = svgAppend(element);
-  svgCanv.attr("width", chartOptions.width + margin.left + margin.right).attr("height", chartOptions.height + margin.top + margin.bottom);
+  svgCanv
+    .attr("width", chartOptions.width + margin.left + margin.right)
+    .attr("height", chartOptions.height + margin.top + margin.bottom);
 
   // the variable will be referencing the svg group(g) inside the svg canvas
   // that will be centered in the canvas, and has the margin we set for it
-  const svg = svgCanv.append("g").attr("transform", `translate(${margin.left},${margin.top})`);
+  const svg = svgCanv
+    .append("g")
+    .attr("transform", `translate(${margin.left},${margin.top})`);
 
   console.log(svg);
   const getChartOptions = () => chartOptions;

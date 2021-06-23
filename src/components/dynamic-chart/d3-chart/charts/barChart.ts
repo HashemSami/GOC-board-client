@@ -1,26 +1,34 @@
-import { linearScale, bandScale, getMaxValue, generateBarXAxis, generateBarYAxis, getMinValue } from "../setup/d3Utils";
+import {
+  linearScale,
+  bandScale,
+  getMaxValue,
+  generateBarXAxis,
+  generateBarYAxis,
+  getMinValue,
+} from "../setup/d3Utils";
 import { ChartOptions } from "../setup/models";
 
-export const barChart = (svg: d3.Selection<SVGGElement, unknown, null, undefined>, chartOptions: ChartOptions) => {
+export const barChart = (
+  svg: d3.Selection<SVGGElement, unknown, null, undefined>,
+  chartOptions: ChartOptions
+) => {
   const { width, height, margin } = chartOptions;
 
   // generates axis labels
-  svg
+  const ChartTitle = svg
     .append("text")
     .attr("x", width / 2)
     .attr("y", height + 40)
-    .attr("text-anchor", "middle")
-    .text("Bar Chart Title");
+    .attr("text-anchor", "middle");
 
-  svg
+  const ChartLeftLabel = svg
     .append("text")
     .attr("x", -(height / 2))
     .attr("y", -40)
     .attr("text-anchor", "middle")
     // rotating the text will also rotate the x and the y axis
     // that are belong to the text
-    .attr("transform", "rotate(-90)")
-    .text("Axis Title");
+    .attr("transform", "rotate(-90)");
 
   // we need to call our xAxis generator on our svg
   // but we need to append them to a group to make both axis
@@ -32,11 +40,13 @@ export const barChart = (svg: d3.Selection<SVGGElement, unknown, null, undefined
 
   return {
     updateData: (newData: { name: string; value: number }[]) => {
+      ChartTitle.text("Bar Chart Title");
+      ChartLeftLabel.text("Axis Title");
       // ------------------------------------------------------------
       // xAxis
       // will also do the scaling for the x values (the fields names)
       const x = bandScale(
-        newData.map(d => d.name),
+        newData.map((d) => d.name),
         [0, width]
       );
       x.padding(0.5);
@@ -51,7 +61,10 @@ export const barChart = (svg: d3.Selection<SVGGElement, unknown, null, undefined
       const min = getMinValue(newData);
       // here we will set the scale of our bar chart to fit all the data into
       // our visulaization
-      const y = linearScale([min ? min * 0.95 : 0, max ? max + 10 : 1000], [height, 0]);
+      const y = linearScale(
+        [min ? min * 0.95 : 0, max ? max + 10 : 1000],
+        [height, 0]
+      );
 
       const yAxisCall = generateBarYAxis(y);
       // we need to call our yAxis generator on our svg
@@ -64,6 +77,7 @@ export const barChart = (svg: d3.Selection<SVGGElement, unknown, null, undefined
       // we can use d3 selectAll method to add visulizaion to our data
       // instead of looping through all the data with for each
       // after adding the data to the SVG, we can save it in a variable.
+
       // DATA JOIN
       const rects = svg.selectAll("rect").data(newData);
       // once you set your data using the data() method, you can have access to all the data
@@ -72,21 +86,29 @@ export const barChart = (svg: d3.Selection<SVGGElement, unknown, null, undefined
       // console.log(x.bandwidth());
 
       // EXIT
-      rects.exit().remove();
+      rects
+        .exit()
+        .transition()
+        .duration(500)
+        .attr("y", height)
+        .attr("height", 0)
+        .remove();
 
       // UPDATE
 
-      xAxisSvg.call(xAxisCall);
-      yAxisSvg.call(yAxisCall);
+      xAxisSvg.transition().duration(500).call(xAxisCall);
+      yAxisSvg.transition().duration(500).call(yAxisCall);
 
       rects
+        .transition()
+        .duration(500)
         .attr("x", (data, i) => {
           const xVal = x(data.name);
           return xVal ? xVal : null;
         })
-        .attr("y", d => y(d.value))
+        .attr("y", (d) => y(d.value))
         .attr("width", x.bandwidth())
-        .attr("height", d => height - y(d.value));
+        .attr("height", (d) => height - y(d.value));
 
       // adding to the enter() phase
       // ENTER
@@ -97,10 +119,13 @@ export const barChart = (svg: d3.Selection<SVGGElement, unknown, null, undefined
           const xVal = x(data.name);
           return xVal ? xVal : null;
         })
-        .attr("y", d => y(d.value))
         .attr("width", x.bandwidth())
-        .attr("height", d => height - y(d.value))
-        .attr("fill", "red");
+        .attr("fill", "red")
+        .attr("y", height)
+        .transition()
+        .duration(500)
+        .attr("y", (d) => y(d.value))
+        .attr("height", (d) => height - y(d.value));
 
       // basic version
       // data.forEach((d, i) => {

@@ -1,4 +1,4 @@
-import { FC } from "react";
+import { FC, useState } from "react";
 import { HomePageContainer, Item } from "./HomePage.styles";
 
 // import { useActions } from "../../hooks/useActions";
@@ -6,17 +6,40 @@ import { HomePageContainer, Item } from "./HomePage.styles";
 // import TimelineViewer from "../../components/timeline/timeline-viewer/TimelineViewer.component";
 import DynamicForm from "../../components/dynamic-form/DynamicForm.component";
 import DynamicChart from "../../components/dynamic-chart/DynamicChart.component";
+import { BarChartObj } from "../../models";
+
+import { data, data2 } from "./testData";
 
 const HomePage: FC = () => {
   // const { setWeekendDays } = useActions();
+  const [barC, setBarC] = useState<BarChartObj | null>(null);
+  const [barC2, setBarC2] = useState<BarChartObj | null>(null);
+
+  const updateBar = () => {
+    if (!barC || !barC2) {
+      return;
+    }
+    barC.updateData(data2);
+    barC2.updateData(data);
+  };
+  const updateBar2 = () => {
+    if (!barC || !barC2) {
+      return;
+    }
+    barC.updateData(data);
+    barC2.updateData(data2);
+  };
 
   const onSubmit = (model: { weekends: string[]; name: string }) => {
-    const weekendsNumbers = model.weekends.map(d => parseInt(d));
+    const weekendsNumbers = model.weekends.map((d) => parseInt(d));
     // setWeekendDays(weekendsNumbers);
     console.log(model);
   };
 
-  const handleSttingsOnChange = (values: { weekends: string[]; name: string }) => {
+  const handleSttingsOnChange = (values: {
+    weekends: string[];
+    name: string;
+  }) => {
     if (!values) {
       return;
     }
@@ -31,7 +54,12 @@ const HomePage: FC = () => {
         <DynamicForm
           title="Settings"
           model={[
-            { key: "name", label: "Name", element: "input", props: { required: true } },
+            {
+              key: "name",
+              label: "Name",
+              element: "input",
+              props: { required: true },
+            },
             {
               key: "weekends",
               label: "Weekends",
@@ -48,14 +76,35 @@ const HomePage: FC = () => {
               props: {},
             },
           ]}
-          onSubmit={model => {
+          onSubmit={(model) => {
             onSubmit(model);
           }}
-          getOnChangeValues={values => handleSttingsOnChange(values)}
+          getOnChangeValues={(values) => handleSttingsOnChange(values)}
         />
       </Item>
       <Item>
-        <DynamicChart width={500} height={300} />
+        <button onClick={updateBar}>upda</button>
+        <button onClick={updateBar2}>upda</button>
+      </Item>
+      <Item>
+        <DynamicChart
+          chartType="barChart"
+          width={500}
+          height={300}
+          updateFunction={(func) => {
+            setBarC(func);
+          }}
+        />
+      </Item>
+      <Item>
+        <DynamicChart
+          chartType="barChart"
+          width={500}
+          height={300}
+          updateFunction={(func) => {
+            setBarC2(func);
+          }}
+        />
       </Item>
       {/* <Item>item2</Item>
       <Item>item3</Item>
