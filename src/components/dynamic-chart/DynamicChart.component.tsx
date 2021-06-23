@@ -20,7 +20,7 @@ const DynamicChart: FC<ChartProps> = ({ width, height, updateFunction }) => {
     }
     const chart = d3Chart(chartDiv.current, width, height);
 
-    const barChart = chart.barChart();
+    const barChart = chart.scatterPlot();
 
     updateFunction(barChart);
     setBarC(barChart);
@@ -28,11 +28,7 @@ const DynamicChart: FC<ChartProps> = ({ width, height, updateFunction }) => {
 
   return (
     <div>
-      <DynamicChartContainer
-        ref={chartDiv}
-        width={width}
-        height={height}
-      ></DynamicChartContainer>
+      <DynamicChartContainer ref={chartDiv} width={width} height={height}></DynamicChartContainer>
       {/* <button onClick={updateBar}>upda</button>
       <button onClick={updateBar2}>upda</button> */}
     </div>

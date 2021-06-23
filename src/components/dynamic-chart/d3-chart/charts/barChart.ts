@@ -1,30 +1,20 @@
-import {
-  linearScale,
-  bandScale,
-  getMaxValue,
-  generateBarXAxis,
-  generateBarYAxis,
-  getMinValue,
-} from "../setup/d3Utils";
+import { linearScale, bandScale, getMaxValue, generateBarXAxis, generateBarYAxis, getMinValue } from "../setup/d3Utils";
 import { ChartOptions } from "../setup/models";
 
-export const barChart = (
-  svg: d3.Selection<SVGGElement, unknown, null, undefined>,
-  chartOptions: ChartOptions
-) => {
+export const barChart = (svg: d3.Selection<SVGGElement, unknown, null, undefined>, chartOptions: ChartOptions) => {
   const { width, height, margin } = chartOptions;
 
   // generates axis labels
   const ChartTitle = svg
     .append("text")
     .attr("x", width / 2)
-    .attr("y", height + 40)
+    .attr("y", height + margin.bottom / 2)
     .attr("text-anchor", "middle");
 
   const ChartLeftLabel = svg
     .append("text")
     .attr("x", -(height / 2))
-    .attr("y", -40)
+    .attr("y", -(margin.left / 2))
     .attr("text-anchor", "middle")
     // rotating the text will also rotate the x and the y axis
     // that are belong to the text
@@ -46,7 +36,7 @@ export const barChart = (
       // xAxis
       // will also do the scaling for the x values (the fields names)
       const x = bandScale(
-        newData.map((d) => d.name),
+        newData.map(d => d.name),
         [0, width]
       );
       x.padding(0.5);
@@ -61,10 +51,7 @@ export const barChart = (
       const min = getMinValue(newData);
       // here we will set the scale of our bar chart to fit all the data into
       // our visulaization
-      const y = linearScale(
-        [min ? min * 0.95 : 0, max ? max + 10 : 1000],
-        [height, 0]
-      );
+      const y = linearScale([min ? min * 0.95 : 0, max ? max + 10 : 1000], [height, 0]);
 
       const yAxisCall = generateBarYAxis(y);
       // we need to call our yAxis generator on our svg
@@ -86,13 +73,7 @@ export const barChart = (
       // console.log(x.bandwidth());
 
       // EXIT
-      rects
-        .exit()
-        .transition()
-        .duration(500)
-        .attr("y", height)
-        .attr("height", 0)
-        .remove();
+      rects.exit().transition().duration(500).attr("y", height).attr("height", 0).remove();
 
       // UPDATE
 
@@ -106,9 +87,9 @@ export const barChart = (
           const xVal = x(data.name);
           return xVal ? xVal : null;
         })
-        .attr("y", (d) => y(d.value))
+        .attr("y", d => y(d.value))
         .attr("width", x.bandwidth())
-        .attr("height", (d) => height - y(d.value));
+        .attr("height", d => height - y(d.value));
 
       // adding to the enter() phase
       // ENTER
@@ -124,8 +105,8 @@ export const barChart = (
         .attr("y", height)
         .transition()
         .duration(500)
-        .attr("y", (d) => y(d.value))
-        .attr("height", (d) => height - y(d.value));
+        .attr("y", d => y(d.value))
+        .attr("height", d => height - y(d.value));
 
       // basic version
       // data.forEach((d, i) => {
