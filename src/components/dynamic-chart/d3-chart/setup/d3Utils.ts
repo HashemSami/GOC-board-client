@@ -4,11 +4,17 @@ export const svgAppend = (element: HTMLDivElement) => {
   return d3.select(element).append("svg");
 };
 
-export const linearScale = (valuesRange: [number, number], canvasRange: [number, number]) => {
+export const linearScale = (
+  valuesRange: [number, number],
+  canvasRange: [number, number]
+) => {
   return d3.scaleLinear().domain(valuesRange).range(canvasRange);
 };
 
-export const bandScale = (listOfNames: string[], canvasRange: [number, number]) => {
+export const bandScale = (
+  listOfNames: string[],
+  canvasRange: [number, number]
+) => {
   return d3.scaleBand().domain(listOfNames).range(canvasRange);
 };
 
@@ -24,13 +30,20 @@ export const generateBarXAxis = (xAxis: d3.ScaleBand<string>) => {
   return d3.axisBottom(xAxis);
 };
 
-export const generateBarYAxis = (yAxis: d3.ScaleLinear<number, number, never>) => {
+export const generateBarYAxis = (
+  yAxis: d3.ScaleLinear<number, number, never>
+) => {
   return d3.axisLeft(yAxis);
 };
 
 // =====================================================
 // for line chart
-export const generateLine = (x?: d3.ScaleBand<string>, y?: d3.ScaleLinear<number, number, never>) => {
-  const lineGenerator = d3.line();
+export const generateLine = (curve?: boolean) => {
+  const lineGenerator = curve ? d3.line().curve(d3.curveCardinal) : d3.line();
   return lineGenerator;
+};
+
+export const generateArea = (curve?: boolean) => {
+  const areaGenerator = d3.area();
+  return areaGenerator;
 };

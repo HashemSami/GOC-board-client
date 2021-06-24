@@ -6,10 +6,11 @@ import {
   generateBarYAxis,
   getMinValue,
   generateLine,
+  generateArea,
 } from "../setup/d3Utils";
 import { ChartOptions } from "../setup/models";
 
-export const lineChart = (
+export const areaChart = (
   svg: d3.Selection<SVGGElement, unknown, null, undefined>,
   chartOptions: ChartOptions
 ) => {
@@ -34,10 +35,10 @@ export const lineChart = (
 
   const yAxisSvg = svg.append("g");
 
-  const lineGenerator = generateLine();
+  const areaGenerator = generateArea();
 
-  // generates line path
-  const lines = svg.append("path");
+  // generates area path
+  const areas = svg.append("path");
 
   return {
     updateData: (newData: { name: string; value: number }[]) => {
@@ -67,6 +68,11 @@ export const lineChart = (
 
       const yAxisCall = generateBarYAxis(y);
 
+      const linearColors = linearScale(
+        [min ? min * 0.95 : 0, max ? max + 10 : 1000],
+        [0, 255]
+      );
+
       // ------------------------------------------------------------
 
       const reshapeData = (
@@ -77,13 +83,15 @@ export const lineChart = (
           return [xVal ? xVal + midPoint : 0, y(d.value)];
         });
 
-      lineGenerator.x((d, i) => d[0]);
-      lineGenerator.y((d) => {
-        console.log(d);
-        return d[1];
-      });
+      areaGenerator.y0(height);
 
-      const line = lineGenerator(reshapeData(newData));
+      // lineGenerator.x((d, i) => d[0]);
+      // lineGenerator.y((d) => {
+      //   console.log(d);
+      //   return d[1];
+      // });
+
+      const area = areaGenerator(reshapeData(newData));
       // ------------------------------------------------------------
       // draw plots
 
@@ -106,7 +114,7 @@ export const lineChart = (
 
       plots
         .transition()
-        .duration(500)
+        .duration(300)
         .attr("cx", (data, i) => {
           const xVal = x(data.name);
           return xVal ? xVal + midPoint : null;
@@ -127,7 +135,7 @@ export const lineChart = (
         .attr("cy", height)
         .style("opacity", 0)
         .transition()
-        .duration(500)
+        .duration(300)
         .style("opacity", 1)
         .attr("cy", (d) => y(d.value));
 
@@ -136,17 +144,19 @@ export const lineChart = (
       // lines.exit().transition().duration(300).style("opacity", 0).remove();
 
       // UPDATE
-      // lines
+      // areas
       //   .transition()
       //   .duration(500)
-      //   .attr("d", line ? line : "");
+      //   .attr("d", area ? area : "");
       // ENTER
-      lines
-        .style("fill", "transparent")
+      areas
+        .style("fill", "blue")
         .attr("stroke", "black")
+        .style("opacity", 0.3)
+        .attr("d", area ? area : "")
         .transition()
-        .duration(350)
-        .attr("d", line ? line : "");
+        .duration(500)
+        .style("opacity", 1);
     },
   };
 };

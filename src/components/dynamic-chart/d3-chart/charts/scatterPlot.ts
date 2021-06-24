@@ -1,7 +1,17 @@
-import { linearScale, bandScale, getMaxValue, generateBarXAxis, generateBarYAxis, getMinValue } from "../setup/d3Utils";
+import {
+  linearScale,
+  bandScale,
+  getMaxValue,
+  generateBarXAxis,
+  generateBarYAxis,
+  getMinValue,
+} from "../setup/d3Utils";
 import { ChartOptions } from "../setup/models";
 
-export const scatterPlot = (svg: d3.Selection<SVGGElement, unknown, null, undefined>, chartOptions: ChartOptions) => {
+export const scatterPlot = (
+  svg: d3.Selection<SVGGElement, unknown, null, undefined>,
+  chartOptions: ChartOptions
+) => {
   const { width, height, margin } = chartOptions;
 
   // generates axis labels
@@ -30,7 +40,7 @@ export const scatterPlot = (svg: d3.Selection<SVGGElement, unknown, null, undefi
       // ------------------------------------------------------------
       // xAxis
       const x = bandScale(
-        newData.map(d => d.name),
+        newData.map((d) => d.name),
         [0, width]
       );
       x.padding(0.5);
@@ -41,7 +51,10 @@ export const scatterPlot = (svg: d3.Selection<SVGGElement, unknown, null, undefi
       // yAxis
       const max = getMaxValue(newData);
       const min = getMinValue(newData);
-      const y = linearScale([min ? min * 0.95 : 0, max ? max + 10 : 1000], [height, 0]);
+      const y = linearScale(
+        [min ? min * 0.95 : 0, max ? max + 10 : 1000],
+        [height, 0]
+      );
 
       const yAxisCall = generateBarYAxis(y);
 
@@ -52,7 +65,14 @@ export const scatterPlot = (svg: d3.Selection<SVGGElement, unknown, null, undefi
       const plots = svg.selectAll("circle").data(newData);
 
       // EXIT
-      plots.exit().transition().duration(500).attr("cy", height).attr("height", 0).style("opacity", 0).remove();
+      plots
+        .exit()
+        .transition()
+        .duration(500)
+        .attr("cy", height)
+        .attr("height", 0)
+        .style("opacity", 0)
+        .remove();
 
       // UPDATE
       xAxisSvg.transition().duration(500).call(xAxisCall);
@@ -60,15 +80,13 @@ export const scatterPlot = (svg: d3.Selection<SVGGElement, unknown, null, undefi
 
       const midPoint = x.bandwidth() / 2;
       plots
-
         .transition()
         .duration(500)
         .attr("cx", (data, i) => {
           const xVal = x(data.name);
           return xVal ? xVal + midPoint : null;
         })
-
-        .attr("cy", d => y(d.value));
+        .attr("cy", (d) => y(d.value));
 
       // adding to the enter() phase
       // ENTER
@@ -86,7 +104,7 @@ export const scatterPlot = (svg: d3.Selection<SVGGElement, unknown, null, undefi
         .transition()
         .duration(500)
         .style("opacity", 1)
-        .attr("cy", d => y(d.value));
+        .attr("cy", (d) => y(d.value));
     },
   };
 };
