@@ -1,4 +1,5 @@
 import * as d3 from "d3";
+import * as topojson from "topojson-client";
 import d3Tip from "d3-tip";
 
 export const svgAppend = (element: HTMLDivElement) => {
@@ -51,4 +52,22 @@ export const generateLine = (curve?: boolean) => {
 export const generateArea = (curve?: boolean) => {
   const areaGenerator = d3.area();
   return areaGenerator;
+};
+
+// =====================================================
+// for Map display
+
+export const geoGraticule = () => {
+  return d3.geoGraticule();
+};
+
+export const generateGeoPath = (width: number, height: number) => {
+  const projection = d3
+    .geoMercator()
+    .center([2, 47])
+    .scale(400)
+    .translate([width / 2, height / 2])
+    .precision(0.1);
+
+  return d3.geoPath(projection);
 };

@@ -6,6 +6,7 @@ import { HomePageContainer, Item } from "./HomePage.styles";
 // import TimelineViewer from "../../components/timeline/timeline-viewer/TimelineViewer.component";
 import DynamicForm from "../../components/dynamic-form/DynamicForm.component";
 import DynamicChart from "../../components/dynamic-chart/DynamicChart.component";
+import MapChart from "../../components/map/MapChart.component";
 import { BarChartObj } from "../../models";
 
 import { data, data2 } from "./testData";
@@ -50,6 +51,16 @@ const HomePage: FC = () => {
   };
   return (
     <HomePageContainer>
+      <Item>
+        <MapChart
+          chartType="barChart"
+          width={500}
+          height={600}
+          updateFunction={(func) => {
+            // setBarC(func);s
+          }}
+        />
+      </Item>
       <Item>
         <DynamicForm
           title="Settings"
