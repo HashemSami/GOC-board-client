@@ -16,5 +16,5 @@ export const DynamicChartContainer = styled.div<ChartContainerProps>`
   display: flex;
   align-items: center;
   justify-content: center;
-  ${setWidthAndHeight}
+  ${setWidthAndHeight};
 `;

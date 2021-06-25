@@ -26,17 +26,7 @@ const DynamicChart: FC<ChartProps> = ({ width, height, updateFunction }) => {
     setBarC(barChart);
   }, []);
 
-  return (
-    <div>
-      <DynamicChartContainer
-        ref={chartDiv}
-        width={width}
-        height={height}
-      ></DynamicChartContainer>
-      {/* <button onClick={updateBar}>upda</button>
-      <button onClick={updateBar2}>upda</button> */}
-    </div>
-  );
+  return <DynamicChartContainer ref={chartDiv} width={width} height={height}></DynamicChartContainer>;
 };
 
 export default DynamicChart;

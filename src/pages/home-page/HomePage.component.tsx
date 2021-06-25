@@ -32,15 +32,12 @@ const HomePage: FC = () => {
   };
 
   const onSubmit = (model: { weekends: string[]; name: string }) => {
-    const weekendsNumbers = model.weekends.map((d) => parseInt(d));
+    const weekendsNumbers = model.weekends.map(d => parseInt(d));
     // setWeekendDays(weekendsNumbers);
     console.log(model);
   };
 
-  const handleSttingsOnChange = (values: {
-    weekends: string[];
-    name: string;
-  }) => {
+  const handleSttingsOnChange = (values: { weekends: string[]; name: string }) => {
     if (!values) {
       return;
     }
@@ -54,9 +51,9 @@ const HomePage: FC = () => {
       <Item>
         <MapChart
           chartType="barChart"
-          width={500}
-          height={600}
-          updateFunction={(func) => {
+          width={700}
+          height={500}
+          updateFunction={func => {
             // setBarC(func);s
           }}
         />
@@ -87,10 +84,10 @@ const HomePage: FC = () => {
               props: {},
             },
           ]}
-          onSubmit={(model) => {
+          onSubmit={model => {
             onSubmit(model);
           }}
-          getOnChangeValues={(values) => handleSttingsOnChange(values)}
+          getOnChangeValues={values => handleSttingsOnChange(values)}
         />
       </Item>
       <Item>
@@ -102,7 +99,7 @@ const HomePage: FC = () => {
           chartType="barChart"
           width={500}
           height={300}
-          updateFunction={(func) => {
+          updateFunction={func => {
             setBarC(func);
           }}
         />
@@ -112,7 +109,7 @@ const HomePage: FC = () => {
           chartType="barChart"
           width={500}
           height={300}
-          updateFunction={(func) => {
+          updateFunction={func => {
             setBarC2(func);
           }}
         />
