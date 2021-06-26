@@ -1,15 +1,15 @@
 import { FC, useEffect, useRef, useState } from "react";
-import { DynamicChartContainer } from "./DynamicChart.styles";
+import { DynamicChartContainer } from "./Timeline.styles";
 
-import { d3Chart } from "./d3-chart";
+import { d3Timeline } from "./d3-timeline";
 import { ChartProps } from "../../models";
 
-interface DynamicChartProps {
+interface MapProps {
   width: number;
   height: number;
 }
 
-const DynamicChart: FC<ChartProps> = ({ width, height, updateFunction }) => {
+const MapChart: FC<ChartProps> = ({ width, height, updateFunction }) => {
   const chartDiv = useRef<HTMLDivElement | null>(null);
 
   const [barC, setBarC] = useState<any>();
@@ -18,9 +18,9 @@ const DynamicChart: FC<ChartProps> = ({ width, height, updateFunction }) => {
     if (!chartDiv.current) {
       return;
     }
-    const chart = d3Chart(chartDiv.current, width, height);
+    const chart = d3Timeline(chartDiv.current, width, height);
 
-    const barChart = chart.barChart();
+    const barChart = chart.mapChart();
 
     updateFunction(barChart);
     setBarC(barChart);
@@ -35,4 +35,4 @@ const DynamicChart: FC<ChartProps> = ({ width, height, updateFunction }) => {
   );
 };
 
-export default DynamicChart;
+export default MapChart;

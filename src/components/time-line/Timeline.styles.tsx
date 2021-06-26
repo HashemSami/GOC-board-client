@@ -16,15 +16,5 @@ export const DynamicChartContainer = styled.div<ChartContainerProps>`
   display: flex;
   align-items: center;
   justify-content: center;
-  .boundary {
-    /* fill: #b3854a; */
-    stroke: black;
-    stroke-width: 1px;
-  }
-  .land {
-    /* fill: #b3854a; */
-    stroke: black;
-    stroke-width: 1px;
-  }
-  ${setWidthAndHeight};
+  ${setWidthAndHeight}
 `;

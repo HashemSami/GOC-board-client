@@ -9,6 +9,7 @@ import {
   generateArea,
 } from "../setup/d3Utils";
 import { ChartOptions } from "../setup/models";
+import { generateValueTip } from "../../../tooltips/chartsToolTips/valueTips";
 
 export const areaChart = (
   svg: d3.Selection<SVGGElement, unknown, null, undefined>,
@@ -39,6 +40,8 @@ export const areaChart = (
 
   // generates area path
   const areas = svg.append("path");
+
+  const tip = generateValueTip(svg, -10);
 
   return {
     updateData: (newData: { name: string; value: number }[]) => {
@@ -97,7 +100,6 @@ export const areaChart = (
 
       // DATA JOIN
       const plots = svg.selectAll("circle").data(newData);
-
       // EXIT
       plots
         .exit()
@@ -126,6 +128,16 @@ export const areaChart = (
       plots
         .enter()
         .append("circle")
+        .on("mousemove", (e, d) => {
+          e.target.style.fill = "yellow";
+          tip.attr("x", e.target.cx.baseVal.value);
+          tip.attr("y", e.target.cy.baseVal.value);
+          tip.text(`${d.value}`);
+        })
+        .on("mouseout", (e, d) => {
+          e.target.style.fill = "red";
+          tip.text("");
+        })
         .attr("cx", (data, i) => {
           const xVal = x(data.name);
           return xVal ? xVal + midPoint : null;
@@ -160,3 +172,17 @@ export const areaChart = (
     },
   };
 };
+
+// const showTooltip = (d) => {
+//   const label = d.properties.name;
+//   var mouse = d3.mouse(svg.node()).map(function (d) {
+//     return parseInt(d);
+//   });
+//   tooltip
+//     .classed("hidden", false)
+//     .attr(
+//       "style",
+//       "left:" + (mouse[0] + offsetL) + "px;top:" + (mouse[1] + offsetT) + "px"
+//     )
+//     .html(label);
+// };

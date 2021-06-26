@@ -5,9 +5,10 @@ import {
   generateBarXAxis,
   generateBarYAxis,
   getMinValue,
-} from "../setup/d3Utils";
-import { ChartOptions } from "../setup/models";
-import { generateValueTip } from "../../../tooltips/chartsToolTips/valueTips";
+  timeScale,
+} from "../../../services/d3";
+import { ChartOptions } from "./models";
+// import { generateValueTip } from "../../../tooltips/chartsToolTips/valueTips";
 
 export const barChart = (
   svg: d3.Selection<SVGGElement, unknown, null, undefined>,
@@ -19,7 +20,7 @@ export const barChart = (
   const ChartTitle = svg
     .append("text")
     .attr("x", width / 2)
-    .attr("y", height + margin.bottom / 2)
+    .attr("y", margin.bottom / 2)
     .attr("text-anchor", "middle");
 
   const ChartLeftLabel = svg
@@ -27,28 +28,22 @@ export const barChart = (
     .attr("x", -(height / 2))
     .attr("y", -(margin.left / 2))
     .attr("text-anchor", "middle")
-    // rotating the text will also rotate the x and the y axis
-    // that are belong to the text
     .attr("transform", "rotate(-90)");
 
-  // we need to call our xAxis generator on our svg
-  // but we need to append them to a group to make both axis
-  // show on the screen, and add the transform to move it to the bottom
-  // of the canvas
   const xAxisSvg = svg.append("g").attr("transform", `translate(0, ${height})`);
 
   const yAxisSvg = svg.append("g");
 
-  const tip = generateValueTip(svg, -10);
+  // const tip = generateValueTip(svg, -10);
 
   return {
-    updateData: (newData: { name: string; value: number }[]) => {
+    updateData: (newData: { minTime: Date; maxTime: Date }[]) => {
       ChartTitle.text("Bar Chart Title");
       ChartLeftLabel.text("Axis Title");
       // ------------------------------------------------------------
       // xAxis
       // will also do the scaling for the x values (the fields names)
-      const x = bandScale(
+      const x = timeScale(
         newData.map((d) => d.name),
         [0, width]
       );

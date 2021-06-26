@@ -1,11 +1,27 @@
-import { linearScale, bandScale, getMaxValue, generateBarXAxis, generateBarYAxis, getMinValue, geoGraticule, generateGeoPath } from "../../../../services/d3";
+import {
+  linearScale,
+  bandScale,
+  getMaxValue,
+  generateBarXAxis,
+  generateBarYAxis,
+  getMinValue,
+  geoGraticule,
+  generateGeoPath,
+} from "../../../../services/d3";
 import { ChartOptions } from "../setup/models";
 import * as topojson from "topojson-client";
-import { GeometryObject, Topology, GeometryCollection } from "topojson-specification";
+import {
+  GeometryObject,
+  Topology,
+  GeometryCollection,
+} from "topojson-specification";
 import world from "../../data/world-110m.topo.json";
 import land from "../../data/land-110m.topo.json";
 
-export const mapChart = (svg: d3.Selection<SVGGElement, unknown, null, undefined>, chartOptions: ChartOptions) => {
+export const mapChart = (
+  svg: d3.Selection<SVGGElement, unknown, null, undefined>,
+  chartOptions: ChartOptions
+) => {
   const { width, height, margin } = chartOptions;
 
   svg.style("fill", "#BC9354");
@@ -35,19 +51,44 @@ export const mapChart = (svg: d3.Selection<SVGGElement, unknown, null, undefined
 
   const graticule = geoGraticule();
 
+  const coo = topojson.mesh(
+    world as unknown as Topology,
+    world.objects.countries as GeometryObject,
+    (a: GeometryObject, b: GeometryObject) => a !== b
+  );
+
+  console.log(coo.coordinates);
   svg
+    .append("g")
     .append("path")
-    .datum(topojson.feature(world as unknown as Topology, world.objects.land as GeometryObject))
+    .datum(
+      topojson.feature(
+        world as unknown as Topology,
+        world.objects.land as GeometryObject
+      )
+    )
     .attr("class", "land")
     .attr("d", geoPath);
 
   svg
+    .append("g")
     .append("path")
-    .datum(topojson.mesh(world as unknown as Topology, world.objects.countries as GeometryObject, (a: GeometryObject, b: GeometryObject) => a !== b))
-    .attr("class", "boundry")
+    .datum(
+      topojson.mesh(
+        world as unknown as Topology,
+        world.objects.countries as GeometryObject,
+        (a: GeometryObject, b: GeometryObject) => a !== b
+      )
+    )
+    .attr("class", "boundary")
     .attr("d", geoPath);
 
-  // svg.append("path").datum(graticule).attr("class", "graticule").attr("d", geoPath);
+  // svg
+  //   .append("g")
+  //   .append("path")
+  //   .datum(graticule)
+  //   .attr("class", "graticule")
+  //   .attr("d", geoPath);
 
   return {
     updateData: (newData: { name: string; value: number }[]) => {
@@ -57,7 +98,7 @@ export const mapChart = (svg: d3.Selection<SVGGElement, unknown, null, undefined
       // xAxis
       // will also do the scaling for the x values (the fields names)
       const x = bandScale(
-        newData.map(d => d.name),
+        newData.map((d) => d.name),
         [0, width]
       );
       x.padding(0.5);
@@ -71,7 +112,10 @@ export const mapChart = (svg: d3.Selection<SVGGElement, unknown, null, undefined
       const max = getMaxValue(newData);
       const min = getMinValue(newData);
 
-      const y = linearScale([min ? min * 0.95 : 0, max ? max + 10 : 1000], [height, 0]);
+      const y = linearScale(
+        [min ? min * 0.95 : 0, max ? max + 10 : 1000],
+        [height, 0]
+      );
 
       const yAxisCall = generateBarYAxis(y);
 
@@ -82,7 +126,13 @@ export const mapChart = (svg: d3.Selection<SVGGElement, unknown, null, undefined
       const rects = svg.selectAll("rect").data(newData);
 
       // EXIT
-      rects.exit().transition().duration(500).attr("y", height).attr("height", 0).remove();
+      rects
+        .exit()
+        .transition()
+        .duration(500)
+        .attr("y", height)
+        .attr("height", 0)
+        .remove();
 
       // UPDATE
 
@@ -96,9 +146,9 @@ export const mapChart = (svg: d3.Selection<SVGGElement, unknown, null, undefined
           const xVal = x(data.name);
           return xVal ? xVal : null;
         })
-        .attr("y", d => y(d.value))
+        .attr("y", (d) => y(d.value))
         .attr("width", x.bandwidth())
-        .attr("height", d => height - y(d.value));
+        .attr("height", (d) => height - y(d.value));
 
       // adding to the enter() phase
       // ENTER
@@ -114,8 +164,8 @@ export const mapChart = (svg: d3.Selection<SVGGElement, unknown, null, undefined
         .attr("y", height)
         .transition()
         .duration(500)
-        .attr("y", d => y(d.value))
-        .attr("height", d => height - y(d.value));
+        .attr("y", (d) => y(d.value))
+        .attr("height", (d) => height - y(d.value));
     },
   };
 };
