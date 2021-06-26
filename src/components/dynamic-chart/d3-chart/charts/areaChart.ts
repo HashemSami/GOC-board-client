@@ -1,20 +1,8 @@
-import {
-  linearScale,
-  bandScale,
-  getMaxValue,
-  generateBarXAxis,
-  generateBarYAxis,
-  getMinValue,
-  generateLine,
-  generateArea,
-} from "../setup/d3Utils";
+import { linearScale, bandScale, getMaxValue, generateBarXAxis, generateBarYAxis, getMinValue, generateLine, generateArea } from "../setup/d3Utils";
 import { ChartOptions } from "../setup/models";
 import { generateValueTip } from "../../../tooltips/chartsToolTips/valueTips";
 
-export const areaChart = (
-  svg: d3.Selection<SVGGElement, unknown, null, undefined>,
-  chartOptions: ChartOptions
-) => {
+export const areaChart = (svg: d3.Selection<SVGGElement, unknown, null, undefined>, chartOptions: ChartOptions) => {
   const { width, height, margin } = chartOptions;
 
   // generates axis labels
@@ -51,36 +39,28 @@ export const areaChart = (
       // ------------------------------------------------------------
       // xAxis
       const x = bandScale(
-        newData.map((d) => d.name),
+        newData.map(d => d.name),
         [0, width]
       );
       x.padding(0.5);
 
       const midPoint = x.bandwidth() / 2;
 
-      const xAxisCall = generateBarXAxis(x);
+      const xAxisCall = generateBarXAxis()(x);
 
       // ------------------------------------------------------------
       // yAxis
       const max = getMaxValue(newData);
       const min = getMinValue(newData);
-      const y = linearScale(
-        [min ? min * 0.95 : 0, max ? max + 10 : 1000],
-        [height, 0]
-      );
+      const y = linearScale([min ? min * 0.95 : 0, max ? max + 10 : 1000], [height, 0]);
 
       const yAxisCall = generateBarYAxis(y);
 
-      const linearColors = linearScale(
-        [min ? min * 0.95 : 0, max ? max + 10 : 1000],
-        [0, 255]
-      );
+      const linearColors = linearScale([min ? min * 0.95 : 0, max ? max + 10 : 1000], [0, 255]);
 
       // ------------------------------------------------------------
 
-      const reshapeData = (
-        data: { name: string; value: number }[]
-      ): [number, number][] =>
+      const reshapeData = (data: { name: string; value: number }[]): [number, number][] =>
         data.map((d, i) => {
           const xVal = x(d.name);
           return [xVal ? xVal + midPoint : 0, y(d.value)];
@@ -101,14 +81,7 @@ export const areaChart = (
       // DATA JOIN
       const plots = svg.selectAll("circle").data(newData);
       // EXIT
-      plots
-        .exit()
-        .transition()
-        .duration(500)
-        .attr("cy", height)
-        .attr("height", 0)
-        .style("opacity", 0)
-        .remove();
+      plots.exit().transition().duration(500).attr("cy", height).attr("height", 0).style("opacity", 0).remove();
 
       // UPDATE
       xAxisSvg.transition().duration(500).call(xAxisCall);
@@ -121,7 +94,7 @@ export const areaChart = (
           const xVal = x(data.name);
           return xVal ? xVal + midPoint : null;
         })
-        .attr("cy", (d) => y(d.value));
+        .attr("cy", d => y(d.value));
 
       // adding to the enter() phase
       // ENTER
@@ -149,7 +122,7 @@ export const areaChart = (
         .transition()
         .duration(300)
         .style("opacity", 1)
-        .attr("cy", (d) => y(d.value));
+        .attr("cy", d => y(d.value));
 
       // Exit
 

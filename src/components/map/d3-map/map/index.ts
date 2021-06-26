@@ -98,12 +98,12 @@ export const mapChart = (
       // xAxis
       // will also do the scaling for the x values (the fields names)
       const x = bandScale(
-        newData.map((d) => d.name),
+        newData.map(d => d.name),
         [0, width]
       );
       x.padding(0.5);
 
-      const xAxisCall = generateBarXAxis(x);
+      const xAxisCall = generateBarXAxis()(x);
 
       // xAxisSvg.call(xAxisCall);
 
@@ -146,9 +146,9 @@ export const mapChart = (
           const xVal = x(data.name);
           return xVal ? xVal : null;
         })
-        .attr("y", (d) => y(d.value))
+        .attr("y", d => y(d.value))
         .attr("width", x.bandwidth())
-        .attr("height", (d) => height - y(d.value));
+        .attr("height", d => height - y(d.value));
 
       // adding to the enter() phase
       // ENTER
@@ -164,8 +164,8 @@ export const mapChart = (
         .attr("y", height)
         .transition()
         .duration(500)
-        .attr("y", (d) => y(d.value))
-        .attr("height", (d) => height - y(d.value));
+        .attr("y", d => y(d.value))
+        .attr("height", d => height - y(d.value));
     },
   };
 };

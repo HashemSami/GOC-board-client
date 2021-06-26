@@ -20,19 +20,13 @@ const MapChart: FC<ChartProps> = ({ width, height, updateFunction }) => {
     }
     const chart = d3Timeline(chartDiv.current, width, height);
 
-    const barChart = chart.mapChart();
+    // const barChart = chart.mapChart();
 
-    updateFunction(barChart);
-    setBarC(barChart);
+    // updateFunction(barChart);
+    // setBarC(barChart);
   }, []);
 
-  return (
-    <DynamicChartContainer
-      ref={chartDiv}
-      width={width}
-      height={height}
-    ></DynamicChartContainer>
-  );
+  return <DynamicChartContainer ref={chartDiv} width={width} height={height}></DynamicChartContainer>;
 };
 
 export default MapChart;

@@ -40,12 +40,12 @@ export const scatterPlot = (
       // ------------------------------------------------------------
       // xAxis
       const x = bandScale(
-        newData.map((d) => d.name),
+        newData.map(d => d.name),
         [0, width]
       );
       x.padding(0.5);
 
-      const xAxisCall = generateBarXAxis(x);
+      const xAxisCall = generateBarXAxis()(x);
 
       // ------------------------------------------------------------
       // yAxis
@@ -86,7 +86,7 @@ export const scatterPlot = (
           const xVal = x(data.name);
           return xVal ? xVal + midPoint : null;
         })
-        .attr("cy", (d) => y(d.value));
+        .attr("cy", d => y(d.value));
 
       // adding to the enter() phase
       // ENTER
@@ -104,7 +104,7 @@ export const scatterPlot = (
         .transition()
         .duration(500)
         .style("opacity", 1)
-        .attr("cy", (d) => y(d.value));
+        .attr("cy", d => y(d.value));
     },
   };
 };

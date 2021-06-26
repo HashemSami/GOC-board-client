@@ -37,36 +37,28 @@ export const barChart = (
   // const tip = generateValueTip(svg, -10);
 
   return {
-    updateData: (newData: { minTime: Date; maxTime: Date }[]) => {
+    updateData: (newData: [minDate: Date, maxDate: Date]) => {
+      const [minDate, maxDate] = newData;
       ChartTitle.text("Bar Chart Title");
       ChartLeftLabel.text("Axis Title");
       // ------------------------------------------------------------
       // xAxis
       // will also do the scaling for the x values (the fields names)
-      const x = timeScale(
-        newData.map((d) => d.name),
-        [0, width]
-      );
-      x.padding(0.5);
+      const x = timeScale([minDate, maxDate], [0, width]);
 
-      const xAxisCall = generateBarXAxis(x);
-
-      const midPoint = x.bandwidth() / 2;
+      const xAxisCall = generateBarXAxis()(x);
 
       // xAxisSvg.call(xAxisCall);
 
       // ------------------------------------------------------------
-      // yAxis
-      const max = getMaxValue(newData);
-      const min = getMinValue(newData);
-      // here we will set the scale of our bar chart to fit all the data into
-      // our visulaization
-      const y = linearScale(
-        [min ? min * 0.95 : 0, max ? max + 10 : 1000],
-        [height, 0]
-      );
+      // // yAxis
+      // const max = getMaxValue(newData);
+      // const min = getMinValue(newData);
+      // // here we will set the scale of our bar chart to fit all the data into
+      // // our visulaization
+      // const y = linearScale([min ? min * 0.95 : 0, max ? max + 10 : 1000], [height, 0]);
 
-      const yAxisCall = generateBarYAxis(y);
+      // const yAxisCall = generateBarYAxis(y);
       // we need to call our yAxis generator on our svg
       // but we need to append them to a group to make both axis
       // show on the screen
@@ -97,18 +89,15 @@ export const barChart = (
       // UPDATE
 
       xAxisSvg.transition().duration(500).call(xAxisCall);
-      yAxisSvg.transition().duration(500).call(yAxisCall);
+      // yAxisSvg.transition().duration(500).call(yAxisCall);
 
       rects
         .transition()
         .duration(500)
         .attr("x", (data, i) => {
-          const xVal = x(data.name);
+          const xVal = x(data);
           return xVal ? xVal : null;
-        })
-        .attr("y", (d) => y(d.value))
-        .attr("width", x.bandwidth())
-        .attr("height", (d) => height - y(d.value));
+        });
 
       // adding to the enter() phase
       // ENTER
@@ -117,36 +106,18 @@ export const barChart = (
         .append("rect")
         .on("mousemove", (e, d) => {
           e.target.style.fill = "yellow";
-          tip.attr("x", e.target.x.baseVal.value + midPoint);
-          tip.attr("y", e.target.y.baseVal.value);
-          tip.text(`${d.value}`);
         })
         .on("mouseout", (e, d) => {
           e.target.style.fill = "red";
-          tip.text("");
         })
         .attr("x", (data, i) => {
-          const xVal = x(data.name);
+          const xVal = x(data);
           return xVal ? xVal : null;
         })
-        .attr("width", x.bandwidth())
         .attr("fill", "red")
         .attr("y", height)
         .transition()
-        .duration(500)
-        .attr("y", (d) => y(d.value))
-        .attr("height", (d) => height - y(d.value));
-
-      // basic version
-      // data.forEach((d, i) => {
-      //   svg
-      //     .append("rect")
-      //     .attr("x", i * 100)
-      //     .attr("y", 50)
-      //     .attr("width", 50)
-      //     .attr("height", d)
-      //     .attr("fill", "red");
-      // });
+        .duration(500);
     },
   };
 };
