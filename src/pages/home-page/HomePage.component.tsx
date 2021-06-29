@@ -7,6 +7,7 @@ import { HomePageContainer, Item } from "./HomePage.styles";
 import DynamicForm from "../../components/dynamic-form/DynamicForm.component";
 import DynamicChart from "../../components/dynamic-chart/DynamicChart.component";
 import MapChart from "../../components/map/MapChart.component";
+import TimelineNavigator from "../../components/time-line-navigator/TimelineNavigator.component";
 import { BarChartObj } from "../../models";
 
 import { data, data2 } from "./testData";
@@ -53,7 +54,14 @@ const HomePage: FC = () => {
   return (
     <HomePageContainer>
       <Item>
-        <Bit />
+        <TimelineNavigator
+          chartType="barChart"
+          width={700}
+          height={500}
+          updateFunction={(func) => {
+            // setBarC(func);s
+          }}
+        />
       </Item>
       <Item>
         <MapChart

@@ -10,27 +10,90 @@ import {
 import { ChartOptions } from "./models";
 // import { generateValueTip } from "../../../tooltips/chartsToolTips/valueTips";
 
-export const barChart = (
+export const timeLineNav = (
   svg: d3.Selection<SVGGElement, unknown, null, undefined>,
   chartOptions: ChartOptions
 ) => {
   const { width, height, margin } = chartOptions;
 
+  const innerMargin = { top: 20, bottom: 20, right: 20, left: 20 };
+
+  const windowHeight = height / 2;
+
+  const topWindowLocation = margin.top;
+  const bottomWindowLocation = windowHeight;
+  const innerWidth = width - margin.left - margin.right;
+  const innerTopHeight = windowHeight - margin.top;
+  const innerBottomHeight = windowHeight - margin.bottom;
+
+  const main = svg.append("g");
+  main
+    .append("rect")
+    .attr("width", width)
+    .attr("height", height)
+    .style("fill", "transparent")
+    .style("stroke", "black");
+
+  // ===============================================
+  // seeting up windows
+  const navigationWindow = main.append("g");
+  navigationWindow
+    .append("rect")
+    .attr("width", innerWidth)
+    .attr("height", innerTopHeight)
+    .attr("transform", `translate(${margin.left},${topWindowLocation})`)
+    .style("fill", "transparent")
+    .style("stroke", "black");
+
+  const chartWindow = main.append("g");
+  chartWindow
+    .append("rect")
+    .attr("width", innerWidth)
+    .attr("height", innerBottomHeight)
+    .attr("transform", `translate(${margin.left},${windowHeight})`)
+    .style("fill", "transparent")
+    .style("stroke", "black");
+
+  // ===============================================
+  // seeting up charts
+  const chartHeight = 130;
+  const chartWidth = innerWidth - innerMargin.left - innerMargin.right;
+  const navigationChart = chartWindow
+    .append("g")
+    .append("rect")
+    .attr("width", chartWidth)
+    .attr("height", chartHeight)
+    .attr(
+      "transform",
+      `translate(${margin.left + innerMargin.left},${
+        bottomWindowLocation + innerMargin.top + 30
+      })`
+    )
+    .style("fill", "transparent")
+    .style("stroke", "black");
+
   // generates axis labels
-  const ChartTitle = svg
+  const ChartTitle = navigationWindow
     .append("text")
     .attr("x", width / 2)
-    .attr("y", margin.bottom / 2)
+    .attr("y", topWindowLocation + innerMargin.top)
     .attr("text-anchor", "middle");
+  ChartTitle.text("Chart Title");
 
-  const ChartLeftLabel = svg
+  const NavChartTitle = chartWindow
     .append("text")
-    .attr("x", -(height / 2))
-    .attr("y", -(margin.left / 2))
-    .attr("text-anchor", "middle")
-    .attr("transform", "rotate(-90)");
+    .attr("x", width / 2)
+    .attr("y", bottomWindowLocation + innerMargin.top)
+    .attr("text-anchor", "middle");
+  // .attr("transform", "rotate(-90)");
+  NavChartTitle.text("Axis Title");
 
-  const xAxisSvg = svg.append("g").attr("transform", `translate(0, ${height})`);
+  const xAxisSvg = svg
+    .append("g")
+    .attr(
+      "transform",
+      `translate(0, ${bottomWindowLocation + innerMargin.top})`
+    );
 
   const yAxisSvg = svg.append("g");
 
@@ -40,7 +103,7 @@ export const barChart = (
     updateData: (newData: [minDate: Date, maxDate: Date]) => {
       const [minDate, maxDate] = newData;
       ChartTitle.text("Bar Chart Title");
-      ChartLeftLabel.text("Axis Title");
+      NavChartTitle.text("Axis Title");
       // ------------------------------------------------------------
       // xAxis
       // will also do the scaling for the x values (the fields names)

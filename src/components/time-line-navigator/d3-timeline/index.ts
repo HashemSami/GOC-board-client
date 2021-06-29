@@ -1,6 +1,8 @@
 import { svgAppend } from "../../../services/d3";
 import { ChartOptions } from "./models";
 
+import { timeLineNav } from "./timeline";
+
 export const d3Timeline = (
   element: HTMLDivElement,
   width: number,
@@ -12,7 +14,7 @@ export const d3Timeline = (
 
   // to seperate the data visulaization fro the eadge of
   // the canvas or the svg
-  const margin = { top: 20, bottom: 90, left: 60, right: 10 };
+  const margin = { top: 20, bottom: 20, left: 20, right: 20 };
 
   const chartOptions = {
     height: height - margin.top - margin.bottom,
@@ -37,5 +39,5 @@ export const d3Timeline = (
     Object.assign(chartOptions, option);
   };
 
-  return {};
+  return { timeLineNav: () => timeLineNav(svg, getChartOptions()) };
 };

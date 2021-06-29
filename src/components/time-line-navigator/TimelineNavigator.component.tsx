@@ -1,5 +1,5 @@
 import { FC, useEffect, useRef, useState } from "react";
-import { DynamicChartContainer } from "./Timeline.styles";
+import { DynamicChartContainer } from "./TimelineNavigator.styles";
 
 import { d3Timeline } from "./d3-timeline";
 import { ChartProps } from "../../models";
@@ -9,7 +9,11 @@ interface MapProps {
   height: number;
 }
 
-const MapChart: FC<ChartProps> = ({ width, height, updateFunction }) => {
+const TimelineNavigator: FC<ChartProps> = ({
+  width,
+  height,
+  updateFunction,
+}) => {
   const chartDiv = useRef<HTMLDivElement | null>(null);
 
   const [barC, setBarC] = useState<any>();
@@ -20,13 +24,19 @@ const MapChart: FC<ChartProps> = ({ width, height, updateFunction }) => {
     }
     const chart = d3Timeline(chartDiv.current, width, height);
 
-    // const barChart = chart.mapChart();
+    const barChart = chart.timeLineNav();
 
     // updateFunction(barChart);
     // setBarC(barChart);
   }, []);
 
-  return <DynamicChartContainer ref={chartDiv} width={width} height={height}></DynamicChartContainer>;
+  return (
+    <DynamicChartContainer
+      ref={chartDiv}
+      width={width}
+      height={height}
+    ></DynamicChartContainer>
+  );
 };
 
-export default MapChart;
+export default TimelineNavigator;
