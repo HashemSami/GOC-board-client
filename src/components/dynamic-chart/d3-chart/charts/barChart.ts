@@ -1,8 +1,18 @@
-import { linearScale, bandScale, getMaxValue, generateBarXAxis, generateBarYAxis, getMinValue } from "../setup/d3Utils";
+import {
+  linearScale,
+  bandScale,
+  getMaxValue,
+  generateBarXAxis,
+  generateBarYAxis,
+  getMinValue,
+} from "../setup/d3Utils";
 import { ChartOptions } from "../setup/models";
 import { generateValueTip } from "../../../tooltips/chartsToolTips/valueTips";
 
-export const barChart = (svg: d3.Selection<SVGGElement, unknown, null, undefined>, chartOptions: ChartOptions) => {
+export const barChart = (
+  svg: d3.Selection<SVGGElement, unknown, null, undefined>,
+  chartOptions: ChartOptions
+) => {
   const { width, height, margin } = chartOptions;
 
   // generates axis labels
@@ -56,7 +66,10 @@ export const barChart = (svg: d3.Selection<SVGGElement, unknown, null, undefined
       const min = getMinValue(newData);
       // here we will set the scale of our bar chart to fit all the data into
       // our visulaization
-      const y = linearScale([min ? min * 0.95 : 0, max ? max + 10 : 1000], [height, 0]);
+      const y = linearScale(
+        [min ? min * 0.95 : 0, max ? max + 10 : 1000],
+        [height, 0]
+      );
 
       const yAxisCall = generateBarYAxis(y);
       // we need to call our yAxis generator on our svg
@@ -78,7 +91,13 @@ export const barChart = (svg: d3.Selection<SVGGElement, unknown, null, undefined
       // console.log(x.bandwidth());
 
       // EXIT
-      rects.exit().transition().duration(500).attr("y", height).attr("height", 0).remove();
+      rects
+        .exit()
+        .transition()
+        .duration(500)
+        .attr("y", height)
+        .attr("height", 0)
+        .remove();
 
       // UPDATE
 

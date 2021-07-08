@@ -6,6 +6,7 @@ export const generateValueTip = (
     .append("g")
     .attr("class", "value-tip")
     .append("text")
+    .style("font-size", "1em")
     .attr("transform", `translate(0, ${offset})`)
     .attr("text-anchor", "middle");
 
