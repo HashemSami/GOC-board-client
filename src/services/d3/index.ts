@@ -1,16 +1,20 @@
 import * as d3 from "d3";
-import * as topojson from "topojson-client";
-import d3Tip from "d3-tip";
 
 export const svgAppend = (element: HTMLDivElement) => {
   return d3.select(element).append("svg");
 };
 
-export const linearScale = (valuesRange: [number, number], canvasRange: [number, number]) => {
+export const linearScale = (
+  valuesRange: [number, number],
+  canvasRange: [number, number]
+) => {
   return d3.scaleLinear().domain(valuesRange).range(canvasRange);
 };
 
-export const bandScale = (listOfNames: string[], canvasRange: [number, number]) => {
+export const bandScale = (
+  listOfNames: string[],
+  canvasRange: [number, number]
+) => {
   return d3.scaleBand().domain(listOfNames).range(canvasRange);
 };
 
@@ -26,13 +30,11 @@ export const generateBarXAxis = () => {
   return d3.axisBottom;
 };
 
-export const generateBarYAxis = (yAxis: d3.ScaleLinear<number, number, never>) => {
-  return d3.axisLeft(yAxis);
+export const generateBarYAxis = () => {
+  return d3.axisLeft;
 };
 
-export const generateTip = () => {
-  const t = d3Tip;
-};
+export const generateTip = () => {};
 
 // =====================================================
 // for line chart
@@ -67,6 +69,13 @@ export const generateGeoPath = (width: number, height: number) => {
 // ====================================================
 // for timeline
 
-export const timeScale = (valuesRange: [Date, Date], canvasRange: [number, number]) => {
+export const timeScale = (
+  valuesRange: [Date, Date],
+  canvasRange: [number, number]
+) => {
   return d3.scaleTime().domain(valuesRange).range(canvasRange);
 };
+
+export const d3Zoom = () => d3.zoom<SVGRectElement, unknown>();
+
+// d3.timeFormat("%I %p")]
