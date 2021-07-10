@@ -63,7 +63,12 @@ export const clasticVsCarbonateChart = (
 
       // ------------------------------------------------------------
       // yAxis
-      const max = getMaxValue(newData);
+
+      const maxVal =
+        newData[0].count > newData[1].count
+          ? newData[0].count
+          : newData[1].count;
+      const max = getMaxValue(maxVal);
       const min = getMinValue(newData);
       // here we will set the scale of our bar chart to fit all the data into
       // our visulaization
