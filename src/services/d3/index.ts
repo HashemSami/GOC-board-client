@@ -34,6 +34,10 @@ export const generateBarYAxis = () => {
   return d3.axisLeft;
 };
 
+export const generateBarYAxisRight = () => {
+  return d3.axisRight;
+};
+
 export const generateTip = () => {};
 
 // =====================================================

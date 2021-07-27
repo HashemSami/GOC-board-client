@@ -117,7 +117,7 @@ export const mapChart = (
         [height, 0]
       );
 
-      const yAxisCall = generateBarYAxis(y);
+      const yAxisCall = generateBarYAxis()(y);
 
       // ------------------------------------------------------------
       // draw rects

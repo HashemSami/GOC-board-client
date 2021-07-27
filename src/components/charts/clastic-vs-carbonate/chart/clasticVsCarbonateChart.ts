@@ -5,6 +5,7 @@ import {
   generateBarXAxis,
   generateBarYAxis,
   getMinValue,
+  generateBarYAxisRight,
 } from "../../../../services/d3";
 import { ChartOptions } from "./models";
 import { generateValueTip } from "../../../tooltips/chartsToolTips/valueTips";
@@ -32,13 +33,11 @@ export const clasticVsCarbonateChart = (
     // that are belong to the text
     .attr("transform", "rotate(-90)");
 
-  // we need to call our xAxis generator on our svg
-  // but we need to append them to a group to make both axis
-  // show on the screen, and add the transform to move it to the bottom
-  // of the canvas
   const xAxisSvg = svg.append("g").attr("transform", `translate(0, ${height})`);
 
-  const yAxisSvg = svg.append("g");
+  const yAxisLeftSvg = svg.append("g");
+
+  const yAxisRightSVG = svg.append("g");
 
   const tip = generateValueTip(svg, -10);
 
@@ -50,7 +49,7 @@ export const clasticVsCarbonateChart = (
       // xAxis
       // will also do the scaling for the x values (the fields names)
       const x = bandScale(
-        newData.map((d) => d.name),
+        newData.map(d => d.name),
         [0, width]
       );
       x.padding(0.5);
@@ -64,37 +63,30 @@ export const clasticVsCarbonateChart = (
       // ------------------------------------------------------------
       // yAxis
 
-      const maxVal =
+      const tgfMaxVal =
+        newData[0].tgf > newData[1].tgf ? newData[0].tgf : newData[1].tgf;
+
+      const countMaxVal =
         newData[0].count > newData[1].count
           ? newData[0].count
           : newData[1].count;
-      const max = getMaxValue(maxVal);
-      const min = getMinValue(newData);
+
+      // const max = getMaxValue(maxVal);
+      // const min = getMinValue(newData);
       // here we will set the scale of our bar chart to fit all the data into
       // our visulaization
-      const y = linearScale(
-        [min ? min * 0.95 : 0, max ? max + 10 : 1000],
-        [height, 0]
-      );
+      const yCount = linearScale([0, countMaxVal], [height, 0]);
 
-      const yAxisCall = generateBarYAxis()(y);
-      // we need to call our yAxis generator on our svg
-      // but we need to append them to a group to make both axis
-      // show on the screen
+      const yTgf = linearScale([0, tgfMaxVal], [height, 0]);
 
-      // ------------------------------------------------------------
+      const yCountAxisCall = generateBarYAxis()(yCount);
+      const yTgfAxisCall = generateBarYAxisRight()(yTgf);
+
       // ------------------------------------------------------------
       // draw rects
-      // we can use d3 selectAll method to add visulizaion to our data
-      // instead of looping through all the data with for each
-      // after adding the data to the SVG, we can save it in a variable.
 
       // DATA JOIN
       const rects = svg.selectAll("rect").data(newData);
-      // once you set your data using the data() method, you can have access to all the data
-      // and the data eteration number in inside the attributes setters as a function
-      // console.log(x("Hashem"));
-      // console.log(x.bandwidth());
 
       // EXIT
       rects
@@ -108,7 +100,8 @@ export const clasticVsCarbonateChart = (
       // UPDATE
 
       xAxisSvg.transition().duration(500).call(xAxisCall);
-      yAxisSvg.transition().duration(500).call(yAxisCall);
+      yAxisLeftSvg.transition().duration(500).call(yCountAxisCall);
+      yAxisRightSVG.transition().duration(500).call(yTgfAxisCall);
 
       rects
         .transition()
@@ -117,9 +110,9 @@ export const clasticVsCarbonateChart = (
           const xVal = x(data.name);
           return xVal ? xVal : null;
         })
-        .attr("y", (d) => y(d.value))
+        .attr("y", d => yCount(d.count))
         .attr("width", x.bandwidth())
-        .attr("height", (d) => height - y(d.value));
+        .attr("height", d => height - yCount(d.count));
 
       // adding to the enter() phase
       // ENTER
@@ -130,7 +123,7 @@ export const clasticVsCarbonateChart = (
           e.target.style.fill = "yellow";
           tip.attr("x", e.target.x.baseVal.value + midPoint);
           tip.attr("y", e.target.y.baseVal.value);
-          tip.text(`${d.value}`);
+          tip.text(`${d.name}`);
         })
         .on("mouseout", (e, d) => {
           e.target.style.fill = "red";
@@ -145,19 +138,8 @@ export const clasticVsCarbonateChart = (
         .attr("y", height)
         .transition()
         .duration(500)
-        .attr("y", (d) => y(d.value))
-        .attr("height", (d) => height - y(d.value));
-
-      // basic version
-      // data.forEach((d, i) => {
-      //   svg
-      //     .append("rect")
-      //     .attr("x", i * 100)
-      //     .attr("y", 50)
-      //     .attr("width", 50)
-      //     .attr("height", d)
-      //     .attr("fill", "red");
-      // });
+        .attr("y", d => yCount(d.count))
+        .attr("height", d => height - yCount(d.count));
     },
   };
 };
