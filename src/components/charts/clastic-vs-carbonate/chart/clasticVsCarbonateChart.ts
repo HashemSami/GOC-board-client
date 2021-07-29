@@ -7,6 +7,13 @@ import {
   getMinValue,
   generateBarYAxisRight,
 } from "../../../../services/d3";
+import {
+  drawCenterLine,
+  countBarsGenerator,
+  tgfBarGenerator,
+  trfBarGenerator,
+} from "./utils";
+import { generateCabonatePattern } from "./patterns";
 import { ChartOptions } from "./models";
 import { generateValueTip } from "../../../tooltips/chartsToolTips/valueTips";
 import { ChartData } from "./models";
@@ -37,9 +44,21 @@ export const clasticVsCarbonateChart = (
 
   const yAxisLeftSvg = svg.append("g");
 
-  const yAxisRightSVG = svg.append("g");
+  const yAxisRightSVG = svg
+    .append("g")
+    .attr("transform", `translate(${width},0)`);
 
   const tip = generateValueTip(svg, -10);
+
+  generateCabonatePattern(svg);
+
+  const footageBars = svg.append("g");
+  const tgfBar = footageBars.append("g");
+  const trfBar = footageBars.append("g");
+  const countBars = svg.append("g");
+
+  const centerLine = svg.append("g").append("line");
+  drawCenterLine(centerLine, width, height);
 
   return {
     updateData: (newData: ChartData) => {
@@ -49,7 +68,7 @@ export const clasticVsCarbonateChart = (
       // xAxis
       // will also do the scaling for the x values (the fields names)
       const x = bandScale(
-        newData.map(d => d.name),
+        newData.map((d) => d.name),
         [0, width]
       );
       x.padding(0.5);
@@ -75,9 +94,9 @@ export const clasticVsCarbonateChart = (
       // const min = getMinValue(newData);
       // here we will set the scale of our bar chart to fit all the data into
       // our visulaization
-      const yCount = linearScale([0, countMaxVal], [height, 0]);
+      const yCount = linearScale([0, countMaxVal + 100], [height, 0]);
 
-      const yTgf = linearScale([0, tgfMaxVal], [height, 0]);
+      const yTgf = linearScale([0, tgfMaxVal + 1000], [height, 0]);
 
       const yCountAxisCall = generateBarYAxis()(yCount);
       const yTgfAxisCall = generateBarYAxisRight()(yTgf);
@@ -86,7 +105,9 @@ export const clasticVsCarbonateChart = (
       // draw rects
 
       // DATA JOIN
-      const rects = svg.selectAll("rect").data(newData);
+      const rects = countBars.selectAll("rect").data(newData);
+      const tgfrect = tgfBar.selectAll("rect").data(newData);
+      const trfrect = trfBar.selectAll("rect").data(newData);
 
       // EXIT
       rects
@@ -110,36 +131,33 @@ export const clasticVsCarbonateChart = (
           const xVal = x(data.name);
           return xVal ? xVal : null;
         })
-        .attr("y", d => yCount(d.count))
+        .attr("y", (d) => yCount(d.count))
         .attr("width", x.bandwidth())
-        .attr("height", d => height - yCount(d.count));
+        .attr("height", (d) => height - yCount(d.count));
 
       // adding to the enter() phase
       // ENTER
-      rects
-        .enter()
-        .append("rect")
-        .on("mousemove", (e, d) => {
-          e.target.style.fill = "yellow";
-          tip.attr("x", e.target.x.baseVal.value + midPoint);
-          tip.attr("y", e.target.y.baseVal.value);
-          tip.text(`${d.name}`);
-        })
-        .on("mouseout", (e, d) => {
-          e.target.style.fill = "red";
-          tip.text("");
-        })
-        .attr("x", (data, i) => {
-          const xVal = x(data.name);
-          return xVal ? xVal : null;
-        })
-        .attr("width", x.bandwidth())
-        .attr("fill", "red")
-        .attr("y", height)
-        .transition()
-        .duration(500)
-        .attr("y", d => yCount(d.count))
-        .attr("height", d => height - yCount(d.count));
+
+      tgfBarGenerator({
+        rects: tgfrect,
+        x,
+        y: yTgf,
+        options: { height, width, midPoint, tip },
+      });
+
+      trfBarGenerator({
+        rects: trfrect,
+        x,
+        y: yTgf,
+        options: { height, width, midPoint, tip },
+      });
+
+      countBarsGenerator({
+        rects,
+        x,
+        y: yCount,
+        options: { height, width, midPoint, tip },
+      });
     },
   };
 };

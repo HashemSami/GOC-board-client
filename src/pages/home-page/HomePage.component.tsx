@@ -8,6 +8,7 @@ import DynamicForm from "../../components/dynamic-form/DynamicForm.component";
 import DynamicChart from "../../components/dynamic-chart/DynamicChart.component";
 import MapChart from "../../components/map/MapChart.component";
 import TimelineNavigator from "../../components/time-line-navigator/TimelineNavigator.component";
+import ClasticVsCarbonateChart from "../../components/charts/clastic-vs-carbonate/ClasticVsCarbonate.component";
 import { BarChartObj } from "../../models";
 
 import { data, data2 } from "./testData";
@@ -53,6 +54,16 @@ const HomePage: FC = () => {
   };
   return (
     <HomePageContainer>
+      <Item>
+        <ClasticVsCarbonateChart
+          width={700}
+          height={500}
+          updateFunction={(func) => {
+            // setBarC(func);s
+          }}
+        />
+      </Item>
+
       <Item>
         <TimelineNavigator
           chartType="barChart"

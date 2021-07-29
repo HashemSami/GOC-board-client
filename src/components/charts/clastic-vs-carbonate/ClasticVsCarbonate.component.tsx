@@ -33,8 +33,8 @@ const ClasticVsCarbonateChart: FC<ClasticVsCarbonateChartProps> = ({
 
     updateFunction(clasticVsCarbonateChart);
     clasticVsCarbonateChart.updateData([
-      { name: "clastic", tgf: 2000, trf: 1700, count: 450, kpi: 88 },
-      { name: "carbonate", tgf: 2500, trf: 1900, count: 670, kpi: 92 },
+      { name: "clastic", tgf: 2000, trf: 700, count: 450, kpi: 88 },
+      { name: "carbonate", tgf: 2500, trf: 900, count: 670, kpi: 92 },
     ]);
     setBarC(clasticVsCarbonateChart);
   }, []);
