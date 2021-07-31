@@ -68,7 +68,11 @@ export const countBarsGenerator = (props: BarGeneratorProp) => {
       return xVal ? xVal : null;
     })
     .attr("width", x.bandwidth())
-    .attr("fill", "red")
+    .attr("fill", (d) => {
+      return d.name === "carbonate"
+        ? "url(#carbonatePattern)"
+        : "url(#clasticPattern)";
+    })
     .attr("y", height)
     .transition()
     .duration(500)
@@ -99,7 +103,7 @@ export const tgfBarGenerator = (props: BarGeneratorProp) => {
       return xVal ? xVal : null;
     })
     .attr("width", width / 2)
-    .attr("fill", "url(#pattern1)")
+    .attr("fill", "url(#tgfPattern)")
     .attr("y", height)
     .transition()
     .duration(500)
@@ -121,7 +125,7 @@ export const trfBarGenerator = (props: BarGeneratorProp) => {
       tip.text(`${d.name}`);
     })
     .on("mouseout", (e, d) => {
-      e.target.style.fill = "green";
+      e.target.style.fill = "#373A36";
       tip.text("");
     })
     .attr("x", (data, i) => {
@@ -130,7 +134,7 @@ export const trfBarGenerator = (props: BarGeneratorProp) => {
       return xVal ? xVal : null;
     })
     .attr("width", width / 2)
-    .attr("fill", "green")
+    .attr("fill", "#373A36")
     .attr("y", height)
     .transition()
     .duration(800)

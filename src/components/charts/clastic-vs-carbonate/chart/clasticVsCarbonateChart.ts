@@ -13,7 +13,10 @@ import {
   tgfBarGenerator,
   trfBarGenerator,
 } from "./utils";
-import { generateCabonatePattern } from "./patterns";
+import {
+  generateTgfPattern,
+  generateCabonateAndClasticPattern,
+} from "./patterns";
 import { ChartOptions } from "./models";
 import { generateValueTip } from "../../../tooltips/chartsToolTips/valueTips";
 import { ChartData } from "./models";
@@ -50,7 +53,8 @@ export const clasticVsCarbonateChart = (
 
   const tip = generateValueTip(svg, -10);
 
-  generateCabonatePattern(svg);
+  generateTgfPattern(svg);
+  generateCabonateAndClasticPattern(svg);
 
   const footageBars = svg.append("g");
   const tgfBar = footageBars.append("g");
