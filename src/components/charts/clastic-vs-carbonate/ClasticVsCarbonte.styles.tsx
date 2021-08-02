@@ -17,4 +17,7 @@ export const ChartContainer = styled.div<ChartContainerProps>`
   align-items: center;
   justify-content: center;
   ${setWidthAndHeight}
+  svg {
+    background-color: teal;
+  }
 `;

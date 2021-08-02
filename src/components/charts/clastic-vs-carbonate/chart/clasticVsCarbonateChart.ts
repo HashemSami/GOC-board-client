@@ -25,33 +25,42 @@ export const clasticVsCarbonateChart = (
   svg: d3.Selection<SVGGElement, unknown, null, undefined>,
   chartOptions: ChartOptions
 ) => {
+  const mainTextColor = "white";
   const { width, height, margin } = chartOptions;
+
+  svg.attr("fill", mainTextColor);
 
   // generates axis labels
   const ChartTitle = svg
     .append("text")
     .attr("x", width / 2)
     .attr("y", height + margin.bottom / 2)
+    .attr("fill", mainTextColor)
     .attr("text-anchor", "middle");
 
   const ChartLeftLabel = svg
     .append("text")
     .attr("x", -(height / 2))
     .attr("y", -(margin.left / 2))
+    .attr("fill", mainTextColor)
     .attr("text-anchor", "middle")
     // rotating the text will also rotate the x and the y axis
     // that are belong to the text
     .attr("transform", "rotate(-90)");
 
-  const xAxisSvg = svg.append("g").attr("transform", `translate(0, ${height})`);
+  const xAxisSvg = svg
+    .append("g")
+    .attr("transform", `translate(0, ${height})`)
+    .attr("fill", mainTextColor);
 
-  const yAxisLeftSvg = svg.append("g");
+  const yAxisLeftSvg = svg.append("g").attr("fill", mainTextColor);
 
   const yAxisRightSVG = svg
     .append("g")
+    .attr("fill", mainTextColor)
     .attr("transform", `translate(${width},0)`);
 
-  const tip = generateValueTip(svg, -10);
+  const tip = generateValueTip(svg, -10).attr("fill", mainTextColor);
 
   generateTgfPattern(svg);
   generateCabonateAndClasticPattern(svg);

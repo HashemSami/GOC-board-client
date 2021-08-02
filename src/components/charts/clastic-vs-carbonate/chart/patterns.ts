@@ -1,4 +1,4 @@
-import v from "../../../../icons/rock.jpg";
+import v from "../../../../icons/rock3.png";
 
 export const generateTgfPattern = (
   svg: d3.Selection<SVGGElement, unknown, null, undefined>
@@ -9,14 +9,14 @@ export const generateTgfPattern = (
     .append("pattern")
     .attr("patternUnits", "userSpaceOnUse")
     .attr("id", "tgfPattern")
-    .attr("width", "100")
-    .attr("height", "100");
+    .attr("width", "500")
+    .attr("height", "233");
   tgfPattern
     .append("image")
     .attr("href", `${v}`)
     .attr("x", "0")
     .attr("y", "0")
-    .attr("style", "background-size: 100% 100%; width:100px; height:auto;");
+    .attr("style", "background-size: 100% 100%; width:auto; height:auto;");
 };
 
 export const generateCabonateAndClasticPattern = (
@@ -87,8 +87,8 @@ export const generateCabonateAndClasticPattern = (
     .append("pattern")
     .attr("patternUnits", "userSpaceOnUse")
     .attr("id", "clasticPattern")
-    .attr("x", "5")
-    .attr("y", "5")
+    .attr("x", "0")
+    .attr("y", "0")
     .attr("width", "8")
     .attr("height", "8");
 
