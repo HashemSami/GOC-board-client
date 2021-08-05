@@ -19,5 +19,16 @@ export const ChartContainer = styled.div<ChartContainerProps>`
   ${setWidthAndHeight}
   svg {
     background-color: teal;
+    .axis-bar {
+      line {
+        stroke: white;
+      }
+      path {
+        stroke: white;
+      }
+      text {
+        fill: white;
+      }
+    }
   }
 `;

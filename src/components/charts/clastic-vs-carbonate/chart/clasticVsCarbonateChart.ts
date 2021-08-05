@@ -12,6 +12,7 @@ import {
   countBarsGenerator,
   tgfBarGenerator,
   trfBarGenerator,
+  kpiGenerator,
 } from "./utils";
 import {
   generateTgfPattern,
@@ -34,7 +35,7 @@ export const clasticVsCarbonateChart = (
   const ChartTitle = svg
     .append("text")
     .attr("x", width / 2)
-    .attr("y", margin.top / 2)
+    .attr("y", -(margin.top / 2))
     .attr("fill", mainTextColor)
     .attr("text-anchor", "middle");
 
@@ -50,35 +51,38 @@ export const clasticVsCarbonateChart = (
 
   const ChartRightLabel = svg
     .append("text")
-    .attr("x", -(height / 2))
-    .attr("y", -(margin.left / 2))
+    .attr("x", height / 2)
+    .attr("y", -(width + margin.left / 2))
     .attr("fill", mainTextColor)
     .attr("text-anchor", "middle")
     // rotating the text will also rotate the x and the y axis
     // that are belong to the text
-    .attr("transform", "rotate(-90)");
+    .attr("transform", "rotate(90)");
 
   const xAxisSvg = svg
     .append("g")
     .attr("transform", `translate(0, ${height})`)
-    .attr("fill", mainTextColor);
+    .attr("class", "axis-bar");
 
-  const yAxisLeftSvg = svg.append("g").attr("fill", mainTextColor);
+  const yAxisLeftSvg = svg.append("g").attr("class", "axis-bar");
 
   const yAxisRightSVG = svg
     .append("g")
-    .attr("fill", mainTextColor)
+    .attr("class", "axis-bar")
     .attr("transform", `translate(${width},0)`);
 
   // generating patterns
   generateTgfPattern(svg);
   generateCabonateAndClasticPattern(svg);
 
+  const percentRect = svg.append("g");
+
   // generate bars groups
   const footageBars = svg.append("g");
   const tgfBar = footageBars.append("g");
   const trfBar = footageBars.append("g");
   const countBars = svg.append("g");
+  const kpiBar = svg.append("g");
 
   // generating tips and lines
   const centerLine = svg.append("g").append("line");
@@ -87,13 +91,14 @@ export const clasticVsCarbonateChart = (
   const tip = generateValueTip(svg, -10).attr("fill", mainTextColor);
   return {
     updateData: (newData: ChartData) => {
-      ChartTitle.text("Bar Chart Title");
-      ChartLeftLabel.text("Axis Title");
+      ChartTitle.text("Carbonates vs Clastics");
+      ChartLeftLabel.text("TD Count");
+      ChartRightLabel.text("TGF / TRF");
       // ------------------------------------------------------------
       // xAxis
       // will also do the scaling for the x values (the fields names)
       const x = bandScale(
-        newData.map(d => d.name),
+        newData.map((d) => d.name),
         [0, width]
       );
       x.padding(0.5);
@@ -123,6 +128,8 @@ export const clasticVsCarbonateChart = (
 
       const yTgf = linearScale([0, tgfMaxVal + 1000], [height, 0]);
 
+      const yKpi = linearScale([0, 100], [0, width / 2 - 30]);
+
       const yCountAxisCall = generateBarYAxis()(yCount);
       const yTgfAxisCall = generateBarYAxisRight()(yTgf);
 
@@ -133,6 +140,7 @@ export const clasticVsCarbonateChart = (
       const rects = countBars.selectAll("rect").data(newData);
       const tgfrect = tgfBar.selectAll("rect").data(newData);
       const trfrect = trfBar.selectAll("rect").data(newData);
+      const kpiRect = kpiBar.selectAll("rect").data(newData);
 
       // EXIT
       rects
@@ -145,7 +153,7 @@ export const clasticVsCarbonateChart = (
 
       // UPDATE
 
-      xAxisSvg.transition().duration(500).call(xAxisCall);
+      // xAxisSvg.transition().duration(500).call(xAxisCall);
       yAxisLeftSvg.transition().duration(500).call(yCountAxisCall);
       yAxisRightSVG.transition().duration(500).call(yTgfAxisCall);
 
@@ -156,9 +164,9 @@ export const clasticVsCarbonateChart = (
           const xVal = x(data.name);
           return xVal ? xVal : null;
         })
-        .attr("y", d => yCount(d.count))
+        .attr("y", (d) => yCount(d.count))
         .attr("width", x.bandwidth())
-        .attr("height", d => height - yCount(d.count));
+        .attr("height", (d) => height - yCount(d.count));
 
       // adding to the enter() phase
       // ENTER
@@ -182,6 +190,13 @@ export const clasticVsCarbonateChart = (
         x,
         y: yCount,
         options: { height, width, midPoint, tip, svg },
+      });
+
+      kpiGenerator({
+        rects: kpiRect,
+        x,
+        y: yKpi,
+        options: { height, width, midPoint, tip, svg: percentRect },
       });
     },
   };
