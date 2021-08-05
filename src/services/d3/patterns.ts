@@ -1,4 +1,4 @@
-import v from "../../../../icons/rock3.png";
+import v from "../../icons/rock2.png";
 
 export const generateTgfPattern = (
   svg: d3.Selection<SVGGElement, unknown, null, undefined>
@@ -9,8 +9,8 @@ export const generateTgfPattern = (
     .append("pattern")
     .attr("patternUnits", "userSpaceOnUse")
     .attr("id", "tgfPattern")
-    .attr("width", "500")
-    .attr("height", "233");
+    .attr("width", "1000")
+    .attr("height", "900");
   tgfPattern
     .append("image")
     .attr("href", `${v}`)

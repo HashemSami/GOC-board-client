@@ -12,3 +12,18 @@ export const generateValueTip = (
 
   return toolTip;
 };
+
+export const generateCenterBarValue = (
+  svg: d3.Selection<SVGGElement, unknown, null, undefined>,
+  offset: number
+) => {
+  const toolTip = svg
+    .append("g")
+    .attr("class", "bar-center-value")
+    .append("rect")
+    .attr("width", "40")
+    .attr("height", "20")
+    .attr("fill", "black");
+
+  return toolTip;
+};

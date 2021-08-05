@@ -16,7 +16,7 @@ import {
 import {
   generateTgfPattern,
   generateCabonateAndClasticPattern,
-} from "./patterns";
+} from "../../../../services/d3/patterns";
 import { ChartOptions } from "./models";
 import { generateValueTip } from "../../../tooltips/chartsToolTips/valueTips";
 import { ChartData } from "./models";
@@ -30,15 +30,25 @@ export const clasticVsCarbonateChart = (
 
   svg.attr("fill", mainTextColor);
 
-  // generates axis labels
+  // generates axis and labels
   const ChartTitle = svg
     .append("text")
     .attr("x", width / 2)
-    .attr("y", height + margin.bottom / 2)
+    .attr("y", margin.top / 2)
     .attr("fill", mainTextColor)
     .attr("text-anchor", "middle");
 
   const ChartLeftLabel = svg
+    .append("text")
+    .attr("x", -(height / 2))
+    .attr("y", -(margin.left / 2))
+    .attr("fill", mainTextColor)
+    .attr("text-anchor", "middle")
+    // rotating the text will also rotate the x and the y axis
+    // that are belong to the text
+    .attr("transform", "rotate(-90)");
+
+  const ChartRightLabel = svg
     .append("text")
     .attr("x", -(height / 2))
     .attr("y", -(margin.left / 2))
@@ -60,19 +70,21 @@ export const clasticVsCarbonateChart = (
     .attr("fill", mainTextColor)
     .attr("transform", `translate(${width},0)`);
 
-  const tip = generateValueTip(svg, -10).attr("fill", mainTextColor);
-
+  // generating patterns
   generateTgfPattern(svg);
   generateCabonateAndClasticPattern(svg);
 
+  // generate bars groups
   const footageBars = svg.append("g");
   const tgfBar = footageBars.append("g");
   const trfBar = footageBars.append("g");
   const countBars = svg.append("g");
 
+  // generating tips and lines
   const centerLine = svg.append("g").append("line");
   drawCenterLine(centerLine, width, height);
 
+  const tip = generateValueTip(svg, -10).attr("fill", mainTextColor);
   return {
     updateData: (newData: ChartData) => {
       ChartTitle.text("Bar Chart Title");
@@ -81,7 +93,7 @@ export const clasticVsCarbonateChart = (
       // xAxis
       // will also do the scaling for the x values (the fields names)
       const x = bandScale(
-        newData.map((d) => d.name),
+        newData.map(d => d.name),
         [0, width]
       );
       x.padding(0.5);
@@ -144,9 +156,9 @@ export const clasticVsCarbonateChart = (
           const xVal = x(data.name);
           return xVal ? xVal : null;
         })
-        .attr("y", (d) => yCount(d.count))
+        .attr("y", d => yCount(d.count))
         .attr("width", x.bandwidth())
-        .attr("height", (d) => height - yCount(d.count));
+        .attr("height", d => height - yCount(d.count));
 
       // adding to the enter() phase
       // ENTER
@@ -155,21 +167,21 @@ export const clasticVsCarbonateChart = (
         rects: tgfrect,
         x,
         y: yTgf,
-        options: { height, width, midPoint, tip },
+        options: { height, width, midPoint, tip, svg },
       });
 
       trfBarGenerator({
         rects: trfrect,
         x,
         y: yTgf,
-        options: { height, width, midPoint, tip },
+        options: { height, width, midPoint, tip, svg },
       });
 
       countBarsGenerator({
         rects,
         x,
         y: yCount,
-        options: { height, width, midPoint, tip },
+        options: { height, width, midPoint, tip, svg },
       });
     },
   };

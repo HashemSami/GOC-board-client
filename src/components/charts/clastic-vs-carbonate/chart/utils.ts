@@ -1,5 +1,4 @@
-import { resourceLimits } from "worker_threads";
-
+import { generateCenterBarValue } from "../../../tooltips/chartsToolTips/valueTips";
 interface BarGeneratorProp {
   rects: d3.Selection<
     d3.BaseType,
@@ -27,6 +26,7 @@ interface BarGeneratorProp {
     width: number;
     midPoint: number;
     tip: d3.Selection<SVGTextElement, unknown, null, undefined>;
+    svg: d3.Selection<SVGGElement, unknown, null, undefined>;
   };
 }
 
@@ -49,18 +49,19 @@ export const drawCenterLine = (
 
 export const countBarsGenerator = (props: BarGeneratorProp) => {
   const { rects, x, y, options } = props;
-  const { height, width, tip, midPoint } = options;
+  const { height, width, tip, midPoint, svg } = options;
+
   rects
     .enter()
     .append("rect")
     .on("mousemove", (e, d) => {
-      e.target.style.fill = "yellow";
+      e.target.style.stroke = "white";
       tip.attr("x", e.target.x.baseVal.value + midPoint);
       tip.attr("y", e.target.y.baseVal.value);
       tip.text(`${d.name}`);
     })
     .on("mouseout", (e, d) => {
-      e.target.style.fill = "red";
+      e.target.style.stroke = "black";
       tip.text("");
     })
     .attr("x", (data, i) => {
@@ -68,7 +69,7 @@ export const countBarsGenerator = (props: BarGeneratorProp) => {
       return xVal ? xVal : null;
     })
     .attr("width", x.bandwidth())
-    .attr("fill", (d) => {
+    .attr("fill", d => {
       return d.name === "carbonate"
         ? "url(#carbonatePattern)"
         : "url(#clasticPattern)";
@@ -77,8 +78,32 @@ export const countBarsGenerator = (props: BarGeneratorProp) => {
     .attr("y", height)
     .transition()
     .duration(500)
-    .attr("y", (d) => y(d.count))
-    .attr("height", (d) => height - y(d.count));
+    .attr("y", d => y(d.count))
+    .attr("height", d => height - y(d.count))
+    .each(data => {
+      const barValue = svg.append("g").attr("class", "bar-center-value");
+      const xVal = x(data.name);
+      const offset = 20;
+      const rectHeight = 30;
+      const valueRect = barValue
+        .append("rect")
+        .attr("width", x.bandwidth() - offset)
+        .attr("height", rectHeight)
+        .attr("transform", `translate(0, ${-rectHeight})`)
+        .attr("fill", "white")
+
+        .attr("x", xVal ? xVal + offset / 2 : 0)
+        .attr("y", height);
+      const text = barValue
+        .append("text")
+        .style("font-size", "1em")
+        .attr("transform", `translate(0, ${-rectHeight / 3})`)
+        .attr("text-anchor", "middle")
+        .attr("x", xVal ? xVal + midPoint : 0)
+        .attr("style", "fill:black;")
+        .attr("y", height)
+        .text(`${data.count} wells`);
+    });
 };
 
 export const tgfBarGenerator = (props: BarGeneratorProp) => {
@@ -89,28 +114,28 @@ export const tgfBarGenerator = (props: BarGeneratorProp) => {
     .enter()
     .append("rect")
     .on("mousemove", (e, d) => {
-      e.target.style.fill = "yellow";
+      e.target.style.stroke = "white";
       tip.attr("x", e.target.x.baseVal.value + midPoint);
       tip.attr("y", e.target.y.baseVal.value);
       tip.text(`${d.name}`);
     })
     .on("mouseout", (e, d) => {
-      e.target.style.fill = "blue";
+      e.target.style.stroke = "black";
       tip.text("");
     })
     .attr("x", (data, i) => {
       // const xVal = x(data.name);
-      const xVal = (width / 2) * i;
+      const xVal = (width / 2) * i + 5;
       return xVal ? xVal : null;
     })
-    .attr("width", width / 2)
+    .attr("width", width / 2 - 10)
     .attr("fill", "url(#tgfPattern)")
     .attr("stroke", "black")
     .attr("y", height)
     .transition()
     .duration(500)
-    .attr("y", (d) => y(d.tgf))
-    .attr("height", (d) => height - y(d.tgf));
+    .attr("y", d => y(d.tgf))
+    .attr("height", d => height - y(d.tgf));
 };
 
 export const trfBarGenerator = (props: BarGeneratorProp) => {
@@ -132,15 +157,15 @@ export const trfBarGenerator = (props: BarGeneratorProp) => {
     })
     .attr("x", (data, i) => {
       // const xVal = x(data.name);
-      const xVal = (width / 2) * i;
+      const xVal = (width / 2) * i + 5;
       return xVal ? xVal : null;
     })
-    .attr("width", width / 2)
-    .attr("fill", "rgb(58 131 34)")
+    .attr("width", width / 2 - 10)
+    .attr("fill", d => (d.trf < d.tgf / 2 ? "red" : "rgb(58 131 34)"))
     .attr("stroke", "black")
     .attr("y", height)
     .transition()
     .duration(800)
-    .attr("y", (d) => y(d.trf))
-    .attr("height", (d) => height - y(d.trf));
+    .attr("y", d => y(d.trf))
+    .attr("height", d => height - y(d.trf));
 };
