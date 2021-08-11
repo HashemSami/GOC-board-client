@@ -1,6 +1,9 @@
 import { generateCenterBarValue } from "../../../tooltips/chartsToolTips/valueTips";
 import { linearScale } from "../../../../services/d3";
 import { DataModel } from "./models";
+import { generateLine } from "../../../../services/d3";
+import { generateTipChart } from "./tips";
+
 interface BarGeneratorProp {
   rects: d3.Selection<d3.BaseType, DataModel, SVGGElement, unknown>;
   x: d3.ScaleBand<string>;
@@ -9,7 +12,7 @@ interface BarGeneratorProp {
     height: number;
     width: number;
     midPoint: number;
-    tip: d3.Selection<SVGTextElement, unknown, null, undefined>;
+    tip: d3.Selection<SVGGElement, unknown, null, undefined>;
     svg: d3.Selection<SVGGElement, unknown, null, undefined>;
   };
 }
@@ -30,45 +33,43 @@ export const drawCenterLine = (
 };
 
 // generates the count bars with the value tables
-export const countBarsGenerator = (props: BarGeneratorProp) => {
+export const countBarsGenerator = (
+  props: BarGeneratorProp,
+  yTip: d3.ScaleLinear<number, number, never>
+) => {
   const { rects, x, y, options } = props;
   const { height, width, tip, midPoint, svg } = options;
 
-  // const ytable = linearScale([0, height], [0, height]);
+  // generating tip component
+  const [tipGroup, updateData] = generateTipChart(tip, width, height, yTip);
+
   rects
     .enter()
-    .append("rect")
+    .append("circle")
     .on("mousemove", (e, d) => {
       e.target.style.stroke = "white";
-      tip.attr("x", e.target.x.baseVal.value + midPoint);
-      tip.attr("y", e.target.y.baseVal.value);
-      e.target.className.baseVal === "count-bar"
-        ? tip.text(`${d.count}`)
-        : tip.text("");
+      const xVal = e.target.cx.baseVal.value;
+      const yVal = e.target.cy.baseVal.value;
+      updateData(xVal, yVal, d);
     })
     .on("mouseout", (e, d) => {
-      e.target.style.stroke = "black";
-      tip.text("");
+      e.target.style.stroke = "none";
+      tipGroup.attr("height", 0).attr("width", 0).attr("x", 0).attr("y", 0);
     })
-    .attr("x", (data, i) => {
-      const xVal = x(data.name);
-      return xVal ? xVal : null;
+    .attr("cx", (data, i) => {
+      const xVal = x(data.monthName);
+      return xVal ? xVal + midPoint : null;
     })
-    .attr("width", x.bandwidth())
-    .attr("fill", (d) => {
-      return d.name === "carbonate"
-        ? "url(#carbonatePattern)"
-        : "url(#clasticPattern)";
-    })
-    .attr("stroke", "black")
-    .attr("class", "count-bar")
-    .attr("y", height)
+    .attr("r", 7)
+    .attr("fill", "brown")
+    .attr("cy", height)
+    .style("opacity", 0)
     .transition()
     .duration(500)
-    .attr("y", (d) => y(d.count))
-    .attr("height", (d) => height - y(d.count))
+    .style("opacity", 1)
+    .attr("cy", (d) => y(d.count))
     .each((data, i) => {
-      generateValuesTable(svg, width, height, i, data);
+      // generateValuesTable(svg, width, height, i, data, x);
     });
 };
 
@@ -76,34 +77,34 @@ export const tgfBarGenerator = (props: BarGeneratorProp) => {
   const { rects, x, y, options } = props;
   const { height, width, tip, midPoint } = options;
 
+  const barWidth = x.bandwidth();
+  const tipTool = tip.append("text");
   rects
     .enter()
     .append("rect")
-    .on("mousemove", (e, d) => {
-      e.target.style.stroke = "white";
-      tip.attr("x", e.target.x.baseVal.value + midPoint);
-      tip.attr("y", e.target.y.baseVal.value);
-      e.target.className.baseVal === "tgf-bar"
-        ? tip.text(`${d.tgf}`)
-        : tip.text("");
-    })
-    .on("mouseout", (e, d) => {
-      e.target.style.stroke = "black";
-      tip.text("");
-    })
+    // .on("mousemove", (e, d) => {
+    //   e.target.style.stroke = "white";
+    //   tipTool.attr("x", e.target.x.baseVal.value + midPoint);
+    //   tipTool.attr("y", e.target.y.baseVal.value);
+    //   tipTool.text(`${d.tgf}`);
+    // })
+    // .on("mouseout", (e, d) => {
+    //   e.target.style.stroke = "black";
+    //   tipTool.text("");
+    // })
     .attr("x", (data, i) => {
       // const xVal = x(data.name);
-      const xVal = (width / 2) * i + 15;
+      const xVal = x(data.monthName);
       return xVal ? xVal : null;
     })
-    .attr("width", width / 2 - 30)
+    .attr("width", barWidth)
     .attr("fill", "url(#tgfPattern)")
     .attr("stroke", "black")
     .attr("class", "tgf-bar")
     .attr("rx", 10)
     .attr("y", height)
     .transition()
-    .duration(500)
+    .duration(1000)
     .attr("y", (d) => y(d.tgf))
     .attr("height", (d) => height - y(d.tgf));
 };
@@ -112,34 +113,35 @@ export const trfBarGenerator = (props: BarGeneratorProp) => {
   const { rects, x, y, options } = props;
   const { height, width, tip, midPoint } = options;
 
+  const barWidth = x.bandwidth();
+
+  const tipTool = tip.append("text");
   rects
     .enter()
     .append("rect")
-    .on("mousemove", (e, d) => {
-      e.target.style.stroke = "white";
-      tip.attr("x", e.target.x.baseVal.value + midPoint);
-      tip.attr("y", e.target.y.baseVal.value);
-      e.target.className.baseVal === "trf-bar"
-        ? tip.text(`${d.trf}`)
-        : tip.text("");
-    })
-    .on("mouseout", (e, d) => {
-      e.target.style.stroke = "black";
-      tip.text("");
-    })
+    // .on("mousemove", (e, d) => {
+    //   e.target.style.stroke = "white";
+    //   tipTool.attr("x", e.target.x.baseVal.value + midPoint);
+    //   tipTool.attr("y", e.target.y.baseVal.value);
+    //   tipTool.text(`${d.trf}`);
+    // })
+    // .on("mouseout", (e, d) => {
+    //   e.target.style.stroke = "black";
+    //   tipTool.text("");
+    // })
     .attr("x", (data, i) => {
       // const xVal = x(data.name);
-      const xVal = (width / 2) * i + 15;
+      const xVal = x(data.monthName);
       return xVal ? xVal : null;
     })
-    .attr("width", width / 2 - 30)
+    .attr("width", barWidth)
     .attr("fill", (d) => (d.trf < d.tgf / 2 ? "red" : "rgba(58, 131, 34, 0.7)"))
     .attr("stroke", "black")
     .attr("class", "trf-bar")
     .attr("rx", 10)
     .attr("y", height)
     .transition()
-    .duration(800)
+    .duration(1400)
     .attr("y", (d) => y(d.trf))
     .attr("height", (d) => height - y(d.trf));
 };
@@ -197,24 +199,15 @@ const generateValuesTable = (
   width: number,
   height: number,
   i: number,
-  data:
-    | {
-        name: "clastic";
-        count: number;
-        tgf: number;
-        trf: number;
-        kpi: number;
-      }
-    | {
-        name: "carbonate";
-        count: number;
-        tgf: number;
-        trf: number;
-        kpi: number;
-      }
+  data: DataModel,
+  x: d3.ScaleBand<string>
 ) => {
   const valueTable = svg.append("g").attr("class", "value-table");
-  const xVal = (width / 2) * i;
+  const xVal = x(data.monthName);
+
+  if (!xVal) {
+    return;
+  }
   const yVal = 90;
   const offset = 20;
   const rectHeight = 20;
@@ -223,7 +216,7 @@ const generateValuesTable = (
 
   valueTable
     .append("rect")
-    .attr("width", width / 2)
+    .attr("width", x.bandwidth())
     .attr("height", yVal)
     .attr("transform", `translate(0, ${5})`)
     .attr("fill", "lightslategray")
@@ -235,7 +228,7 @@ const generateValuesTable = (
   valueTable
     .append("rect")
     .attr("transform", `translate(0, ${5})`)
-    .attr("width", width / 2)
+    .attr("width", x.bandwidth())
     .attr("height", 20)
     .attr("stroke", "white")
     .attr("x", xVal)
@@ -250,7 +243,9 @@ const generateValuesTable = (
     .attr("x", xVal + width / 4)
     // .attr("style", "fill:white;")
     .attr("y", height)
-    .text(`${data.name.charAt(0).toUpperCase() + data.name.slice(1)}`);
+    .text(
+      `${data.monthName.charAt(0).toUpperCase() + data.monthName.slice(1)}`
+    );
 
   // count rect
   valueTable
@@ -262,7 +257,7 @@ const generateValuesTable = (
     .attr("x", xVal + 20)
     .attr(
       "fill",
-      data.name === "carbonate"
+      data.monthName === "carbonate"
         ? "url(#carbonatePattern)"
         : "url(#clasticPattern)"
     )

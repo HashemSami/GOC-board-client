@@ -17,7 +17,7 @@ export const d3Chart = (
 
   const chartOptions = {
     height: height - margin.top - margin.bottom,
-    width: width - margin.left - margin.right,
+    width: element.clientWidth - margin.left - margin.right,
     margin,
   };
 

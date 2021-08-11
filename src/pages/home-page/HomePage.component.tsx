@@ -9,6 +9,8 @@ import DynamicChart from "../../components/dynamic-chart/DynamicChart.component"
 import MapChart from "../../components/map/MapChart.component";
 import TimelineNavigator from "../../components/time-line-navigator/TimelineNavigator.component";
 import ClasticVsCarbonateChart from "../../components/charts/clastic-vs-carbonate/ClasticVsCarbonate.component";
+import ProgressChart from "../../components/charts/progress-chart/ProgressChart.component";
+import TotalCountChart from "../../components/charts/total-count-chart/TotalCountChart.component";
 import { BarChartObj } from "../../models";
 
 import { data, data2 } from "./testData";
@@ -55,7 +57,33 @@ const HomePage: FC = () => {
   return (
     <HomePageContainer>
       <Item>
+        <TotalCountChart
+          width={800}
+          height={500}
+          updateFunction={(func) => {
+            // setBarC(func);s
+          }}
+        />
+      </Item>
+      <Item>
+        <ProgressChart
+          width={800}
+          height={150}
+          updateFunction={(func) => {
+            // setBarC(func);s
+          }}
+        />
+      </Item>
+      <Item>
         <ClasticVsCarbonateChart
+          width={700}
+          height={500}
+          updateFunction={(func) => {
+            // setBarC(func);s
+          }}
+        />
+        <MapChart
+          chartType="barChart"
           width={700}
           height={500}
           updateFunction={(func) => {

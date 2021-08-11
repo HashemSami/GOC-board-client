@@ -13,9 +13,12 @@ const setWidthAndHeight = (props: ChartContainerProps) => {
 };
 
 export const DynamicChartContainer = styled.div<ChartContainerProps>`
+  grid-column: col 1 / col 7;
+  grid-row: 1;
   display: flex;
-  align-items: center;
   justify-content: center;
+  align-items: center;
+  margin-left: 20px;
   .boundary {
     /* fill: #b3854a; */
     stroke: black;

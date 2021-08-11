@@ -13,12 +13,13 @@ const setWidthAndHeight = (props: ChartContainerProps) => {
 };
 
 export const ChartContainer = styled.div<ChartContainerProps>`
-  grid-column: col 7 / col 13;
+  grid-column: col 1 / col 13;
   grid-row: 1;
   display: flex;
   justify-content: center;
   align-items: center;
   margin-right: 20px;
+  margin-left: 20px;
 
   ${setWidthAndHeight}
   svg {
@@ -33,6 +34,23 @@ export const ChartContainer = styled.div<ChartContainerProps>`
       }
       text {
         fill: white;
+      }
+    }
+    .bit-icon {
+      animation: hideshow 2s ease infinite;
+    }
+    @keyframes hideshow {
+      0% {
+        stroke: orange;
+      }
+      10% {
+        stroke: #333333;
+      }
+      50% {
+        stroke: black;
+      }
+      100% {
+        stroke: #333333;
       }
     }
   }

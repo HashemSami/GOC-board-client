@@ -9,21 +9,14 @@ export interface ChartOptions {
   };
 }
 
-export type DataModel =
-  | {
-      name: "clastic";
-      count: number;
-      tgf: number;
-      trf: number;
-      kpi: number;
-    }
-  | {
-      name: "carbonate";
-      count: number;
-      tgf: number;
-      trf: number;
-      kpi: number;
-    };
+export interface DataModel {
+  name: "GOC" | "NFCD" | "SARCD" | "GRCD";
+  count: number;
+  tgf: number;
+  trf: number;
+  kpi: number;
+  target: number;
+}
 
 export type ChartData = DataModel[];
 

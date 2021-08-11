@@ -4,7 +4,7 @@ export const HomePageContainer = styled.div`
   grid-row: main-body;
   grid-column: col 1 / col 13;
   /* min-height: 100%; */
-  background-color: skyblue;
+  background-color: #75bfc2;
   display: grid;
   grid-template-columns: repeat(12, [col] 1fr);
   grid-auto-rows: minmax(100px, auto);
@@ -19,9 +19,20 @@ export const HomePageContainer = styled.div`
 export const Item = styled.div`
   grid-column: col 1 / col 13;
   /* grid-row: header; */
-  background-color: #2d9a4c;
+  background-color: #005457;
+
+  padding: 20px 0;
+  display: grid;
+  grid-template-columns: repeat(12, [col] 1fr);
+  grid-auto-rows: minmax(100px, auto);
+  justify-content: center;
+  /* justify-items: stretch; */
+  /* align-items: stretch; */
+  /* align-content: stretch; */
+  column-gap: 1vw;
+  row-gap: 1vh;
 
   @media (min-width: 901px) {
-    grid-column: col 3 / col 11;
+    grid-column: col 3 / col 13;
   }
 `;

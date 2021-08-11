@@ -1,6 +1,6 @@
 import { svgAppend } from "../../../../services/d3";
 import { ChartOptions } from "./models";
-import { clasticVsCarbonateChart } from "./clasticVsCarbonateChart";
+import { totalCountChart } from "./totalCountChart";
 
 export const d3Chart = (
   element: HTMLDivElement,
@@ -13,7 +13,7 @@ export const d3Chart = (
 
   // to seperate the data visulaization fro the eadge of
   // the canvas or the svg
-  const margin = { top: 60, bottom: 120, left: 80, right: 80 };
+  const margin = { top: 60, bottom: 80, left: 80, right: 80 };
 
   const chartOptions = {
     height: height - margin.top - margin.bottom,
@@ -39,7 +39,6 @@ export const d3Chart = (
   };
 
   return {
-    clasticVsCarbonateChart: () =>
-      clasticVsCarbonateChart(svg, getChartOptions()),
+    totalCountChart: () => totalCountChart(svg, getChartOptions()),
   };
 };

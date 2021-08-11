@@ -6,6 +6,7 @@ import {
   generateBarYAxis,
   getMinValue,
   generateBarYAxisRight,
+  generateLine,
 } from "../../../../services/d3";
 
 import {
@@ -16,16 +17,12 @@ import {
   kpiGenerator,
 } from "./utils";
 
-import {
-  generateTgfPattern,
-  generateCabonateAndClasticPattern,
-} from "../../../../services/d3/patterns";
+import { generateValueTip } from "../../../tooltips/chartsToolTips/valueTips";
 
 import { ChartOptions } from "./models";
-import { generateValueTip } from "../../../tooltips/chartsToolTips/valueTips";
 import { ChartData } from "./models";
 
-export const clasticVsCarbonateChart = (
+export const totalCountChart = (
   svg: d3.Selection<SVGGElement, unknown, null, undefined>,
   chartOptions: ChartOptions
 ) => {
@@ -74,79 +71,86 @@ export const clasticVsCarbonateChart = (
     .attr("class", "axis-bar")
     .attr("transform", `translate(${width},0)`);
 
-  // generating patterns
-  generateTgfPattern(svg);
-  generateCabonateAndClasticPattern(svg);
-
-  const percentRect = svg.append("g");
-
   // generate bars groups
   const footageBars = svg.append("g");
   const tgfBar = footageBars.append("g");
   const trfBar = footageBars.append("g");
-  const countBars = svg.append("g");
-  const kpiBar = svg.append("g");
+  // generates line path
+  const lineGenerator = generateLine();
+  const countCir = svg.append("g");
+  const countLine = countCir.append("path");
 
-  // generating tips and lines
-  const centerLine = svg.append("g").append("line");
-  drawCenterLine(centerLine, width, height);
+  // parsentage rect
+  const percentRect = svg.append("g");
 
-  const tip = generateValueTip(svg, -10).attr("fill", mainTextColor);
+  const progressBar = svg.append("g");
+
+  const bit = svg.append("g");
+
+  const countTip = svg.append("g").attr("fill", mainTextColor);
+  const footageTip = svg.append("g").attr("fill", mainTextColor);
+
   return {
     updateData: (newData: ChartData) => {
       ChartTitle.text("Carbonates vs Clastics");
       ChartLeftLabel.text("TD Count");
       ChartRightLabel.text("TGF / TRF");
+
       // ------------------------------------------------------------
       // xAxis
       // will also do the scaling for the x values (the fields names)
       const x = bandScale(
-        newData.map((d) => d.name),
+        newData.map((d) => d.monthName),
         [0, width]
       );
-      x.padding(0.5);
+      x.padding(0.3);
 
       const xAxisCall = generateBarXAxis()(x);
 
       const midPoint = x.bandwidth() / 2;
 
-      // xAxisSvg.call(xAxisCall);
-
       // ------------------------------------------------------------
       // yAxis
 
-      const tgfMaxVal =
-        newData[0].tgf > newData[1].tgf ? newData[0].tgf : newData[1].tgf;
+      const tgfMaxVal = newData.reduce((acc, cur) => {
+        return acc < cur.tgf ? cur.tgf : acc;
+      }, 0);
 
-      const countMaxVal =
-        newData[0].count > newData[1].count
-          ? newData[0].count
-          : newData[1].count;
+      const countMaxVal = newData.reduce((acc, cur) => {
+        return acc < cur.count ? cur.count : acc;
+      }, 0);
 
-      // const max = getMaxValue(maxVal);
-      // const min = getMinValue(newData);
-      // here we will set the scale of our bar chart to fit all the data into
-      // our visulaization
       const yCount = linearScale([0, countMaxVal + 100], [height, 0]);
 
       const yTgf = linearScale([0, tgfMaxVal + 1000], [height, 0]);
 
-      const yKpi = linearScale([0, 100], [0, width / 2 - 30]);
+      const yTip = linearScale([0, countMaxVal + 100], [200, 0]);
+      // const yKpi = linearScale([0, 100], [0, width / 2 - 30]);
 
       const yCountAxisCall = generateBarYAxis()(yCount);
       const yTgfAxisCall = generateBarYAxisRight()(yTgf);
 
       // ------------------------------------------------------------
+
+      const lineData: [number, number][] = newData.map((d) => {
+        const xVal = x(d.monthName);
+        return [xVal ? xVal + midPoint : 0, yCount(d.count)];
+      });
+
+      lineGenerator(lineData);
+      lineGenerator.x((d) => d[0]);
+      lineGenerator.y((d) => d[1]);
+      const line = lineGenerator(lineData);
+
       // draw rects
 
       // DATA JOIN
-      const rects = countBars.selectAll("rect").data(newData);
+      const countDis = countCir.selectAll("circle").data(newData);
       const tgfrect = tgfBar.selectAll("rect").data(newData);
       const trfrect = trfBar.selectAll("rect").data(newData);
-      const kpiRect = kpiBar.selectAll("rect").data(newData);
 
       // EXIT
-      rects
+      countDis
         .exit()
         .transition()
         .duration(500)
@@ -156,15 +160,15 @@ export const clasticVsCarbonateChart = (
 
       // UPDATE
 
-      // xAxisSvg.transition().duration(500).call(xAxisCall);
+      xAxisSvg.transition().duration(500).call(xAxisCall);
       yAxisLeftSvg.transition().duration(500).call(yCountAxisCall);
       yAxisRightSVG.transition().duration(500).call(yTgfAxisCall);
 
-      rects
+      countDis
         .transition()
         .duration(500)
         .attr("x", (data, i) => {
-          const xVal = x(data.name);
+          const xVal = x(data.monthName);
           return xVal ? xVal : null;
         })
         .attr("y", (d) => yCount(d.count))
@@ -178,29 +182,34 @@ export const clasticVsCarbonateChart = (
         rects: tgfrect,
         x,
         y: yTgf,
-        options: { height, width, midPoint, tip, svg },
+        options: { height, width, midPoint, tip: footageTip, svg },
       });
 
       trfBarGenerator({
         rects: trfrect,
         x,
         y: yTgf,
-        options: { height, width, midPoint, tip, svg },
+        options: { height, width, midPoint, tip: footageTip, svg },
       });
 
-      countBarsGenerator({
-        rects,
-        x,
-        y: yCount,
-        options: { height, width, midPoint, tip, svg },
-      });
+      countBarsGenerator(
+        {
+          rects: countDis,
+          x,
+          y: yCount,
+          options: { height, width, midPoint, tip: countTip, svg },
+        },
+        yTip
+      );
 
-      kpiGenerator({
-        rects: kpiRect,
-        x,
-        y: yKpi,
-        options: { height, width, midPoint, tip, svg: percentRect },
-      });
+      countLine
+        .style("fill", "transparent")
+        .attr("stroke", "black")
+        .attr("stroke", "brown")
+        .attr("stroke-width", 4)
+        .transition()
+        .duration(350)
+        .attr("d", line ? line : "");
     },
   };
 };
