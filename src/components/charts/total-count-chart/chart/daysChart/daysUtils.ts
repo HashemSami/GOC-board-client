@@ -1,12 +1,11 @@
-import { DataModel } from "./models";
-import { generateCountTipChart } from "./tips/CountTips";
-import { generateFootageTipChart } from "./tips/footageTips";
-import { generateDaysChart } from "./daysChart";
-import { ChartOptions } from "./models";
-import { chartColors } from "../../../../styles/colors";
+import { DaysDataModel } from "../models";
+import { generateCountTipChart } from "../tips/CountTips";
+import { generateDaysChart } from "../daysChart";
+import { ChartOptions } from "../models";
+import { chartColors } from "../../../../../styles/colors";
 
 interface BarGeneratorProp {
-  rects: d3.Selection<d3.BaseType, DataModel, SVGGElement, unknown>;
+  rects: d3.Selection<d3.BaseType, DaysDataModel, SVGGElement, unknown>;
   x: d3.ScaleBand<string>;
   y: d3.ScaleLinear<number, number, never>;
   options: {
@@ -37,11 +36,7 @@ export const drawCenterLine = (
 export const countBarsGenerator = (
   props: BarGeneratorProp,
   chartOptions: ChartOptions,
-  axisSvg: {
-    xAxisSvg: d3.Selection<SVGGElement, unknown, null, undefined>;
-    yAxisLeftSvg: d3.Selection<SVGGElement, unknown, null, undefined>;
-    yAxisRightSVG: d3.Selection<SVGGElement, unknown, null, undefined>;
-  }
+  chartSvg: d3.Selection<SVGSVGElement, unknown, null, undefined>
 ) => {
   const { rects, x, y, options } = props;
   const { height, width, tip, midPoint, svg } = options;
@@ -49,7 +44,7 @@ export const countBarsGenerator = (
   // generating tip component
   const [tipGroup, updateData] = generateCountTipChart(tip, width, height);
 
-  const daysChart = generateDaysChart(svg, chartOptions, axisSvg);
+  // const daysChart = generateDaysChart(svg, chartOptions);
 
   rects
     .enter()
@@ -66,15 +61,14 @@ export const countBarsGenerator = (
     })
     .on("click", (e, d) => {
       // e.target.style.stroke = "yellow";
-      daysChart.updateData(d);
-
+      chartSvg.transition().duration(300).attr("height", 0).attr("width", 0);
       // tipGroup.transition().duration(50).attr("height", 0).attr("width", 0);
     })
     .attr("cx", (data, i) => {
-      const xVal = x(data.monthName);
+      const xVal = x(data.dayNumber);
       return xVal ? xVal + midPoint : null;
     })
-    .attr("r", 9)
+    .attr("r", 7)
     .attr("fill", chartColors.countCir)
     .attr("stroke", chartColors.countCirStroke)
     .attr("cy", height)
@@ -92,28 +86,29 @@ export const tgfBarGenerator = (props: BarGeneratorProp) => {
   const { rects, x, y, options } = props;
   const { height, width, tip, midPoint } = options;
 
-  const [tipGroup, updateData] = generateFootageTipChart(tip, width, height);
   const barWidth = x.bandwidth();
+  const tipTool = tip.append("text");
   rects
     .enter()
     .append("rect")
     // .on("mousemove", (e, d) => {
-    //   const xVal = e.target.x.baseVal.value;
-    //   const yVal = e.target.y.baseVal.value;
-    //   updateData(xVal, yVal, d);
+    //   e.target.style.stroke = "white";
+    //   tipTool.attr("x", e.target.x.baseVal.value + midPoint);
+    //   tipTool.attr("y", e.target.y.baseVal.value);
+    //   tipTool.text(`${d.tgf}`);
     // })
     // .on("mouseout", (e, d) => {
-    //   // e.target.style.stroke = "none";
-    //   tipGroup.transition().duration(50).attr("height", 0).attr("width", 0);
+    //   e.target.style.stroke = "black";
+    //   tipTool.text("");
     // })
     .attr("x", (data, i) => {
       // const xVal = x(data.name);
-      const xVal = x(data.monthName);
+      const xVal = x(data.dayNumber);
       return xVal ? xVal : null;
     })
     .attr("width", barWidth)
     .attr("fill", "url(#tgfPattern)")
-    .attr("stroke", "black")
+    .attr("stroke", chartColors.footageStroke)
     .attr("class", "tgf-bar")
     .attr("rx", 10)
     .attr("y", height)
@@ -145,14 +140,14 @@ export const trfBarGenerator = (props: BarGeneratorProp) => {
     // })
     .attr("x", (data, i) => {
       // const xVal = x(data.name);
-      const xVal = x(data.monthName);
+      const xVal = x(data.dayNumber);
       return xVal ? xVal : null;
     })
     .attr("width", barWidth)
     .attr("fill", d =>
       d.trf < d.tgf / 2 ? chartColors.trfLow : chartColors.trf
     )
-    .attr("stroke", "black")
+    .attr("stroke", chartColors.footageStroke)
     .attr("class", "trf-bar")
     .attr("rx", 10)
     .attr("y", height)

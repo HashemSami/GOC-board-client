@@ -93,7 +93,7 @@ const getDaysObject = (
     // const jsDate = date.toDate();
 
     const dateString = `${monthNumber + 1}-${monthDay}-${year}`;
-    const dayObject = {
+    const dayObject: DaysObject = {
       [dateString]: {
         dateString,
         dayIndex: weekDay,

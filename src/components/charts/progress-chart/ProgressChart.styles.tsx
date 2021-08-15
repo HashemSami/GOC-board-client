@@ -47,10 +47,10 @@ export const ChartContainer = styled.div<ChartContainerProps>`
         stroke: #333333;
       }
       50% {
-        stroke: black;
+        stroke: #313131;
       }
       100% {
-        stroke: #333333;
+        stroke: #292828;
       }
     }
   }

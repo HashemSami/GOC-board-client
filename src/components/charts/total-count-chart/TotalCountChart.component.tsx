@@ -19,13 +19,33 @@ interface TotalCountChartProps {
 const testData: ChartData = months.map((d, i) => {
   const rand = Math.floor(Math.random() * 10) + 1;
 
-  const divs: DivisionName = [
-    { name: "NARCD", count: 230 * Math.floor(Math.random() * 10) + 1 },
-    { name: "SARCD", count: 230 * Math.floor(Math.random() * 10) + 1 },
-    { name: "GRCD", count: 230 * Math.floor(Math.random() * 10) + 1 },
-  ];
+  const divs: DivisionName = {
+    NARCD: {
+      name: "NARCD",
+      count: 230 * Math.floor(Math.random() * 10) + 1,
+      tgf: 800 * rand,
+      trf: 500 * rand,
+      kpi: 50,
+    },
+    SARCD: {
+      name: "SARCD",
+      count: 230 * Math.floor(Math.random() * 10) + 1,
+      tgf: 800 * rand,
+      trf: 500 * rand,
+      kpi: 50,
+    },
+    GRCD: {
+      name: "GRCD",
+      count: 230 * Math.floor(Math.random() * 10) + 1,
+      tgf: 800 * rand,
+      trf: 500 * rand,
+      kpi: 50,
+    },
+  };
 
-  const count = divs.reduce((acc, curr) => acc + curr.count, 0);
+  const count = divs.NARCD.count + divs.GRCD.count + divs.SARCD.count;
+  const tgf = divs.NARCD.tgf + divs.GRCD.tgf + divs.SARCD.tgf;
+  const trf = divs.NARCD.trf + divs.GRCD.trf + divs.SARCD.trf;
 
   return {
     monthName: d,
@@ -33,8 +53,8 @@ const testData: ChartData = months.map((d, i) => {
     year: 2021,
     divisions: divs,
     count,
-    tgf: 800 * rand,
-    trf: 500 * rand,
+    tgf,
+    trf,
     kpi: 50 + i,
   };
 });

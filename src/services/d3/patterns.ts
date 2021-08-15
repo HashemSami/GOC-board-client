@@ -16,7 +16,7 @@ export const generateTgfPattern = (
     .attr("href", `${v}`)
     .attr("x", "0")
     .attr("y", "0")
-    .attr("style", "background-size: 100% 100%; width:auto; height:auto;");
+    .attr("style", "background-size: 500% 500%; width:auto; height:auto;");
 };
 
 export const generateCabonateAndClasticPattern = (

@@ -1,4 +1,5 @@
 export interface DayObject {
+  dateString: string;
   dayIndex: number;
   dayNumber: number;
   dayValue: number;

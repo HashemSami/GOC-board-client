@@ -1,6 +1,7 @@
 import { generateCenterBarValue } from "../../../tooltips/chartsToolTips/valueTips";
 import { linearScale } from "../../../../services/d3";
 import { DataModel } from "./models";
+import { chartColors } from "../../../../styles/colors";
 interface BarGeneratorProp {
   rects: d3.Selection<d3.BaseType, DataModel, SVGGElement, unknown>;
   x: d3.ScaleBand<string>;
@@ -42,9 +43,7 @@ export const countBarsGenerator = (props: BarGeneratorProp) => {
       e.target.style.stroke = "white";
       tip.attr("x", e.target.x.baseVal.value + midPoint);
       tip.attr("y", e.target.y.baseVal.value);
-      e.target.className.baseVal === "count-bar"
-        ? tip.text(`${d.count}`)
-        : tip.text("");
+      tip.text(`${d.count}`);
     })
     .on("mouseout", (e, d) => {
       e.target.style.stroke = "black";
@@ -55,7 +54,7 @@ export const countBarsGenerator = (props: BarGeneratorProp) => {
       return xVal ? xVal : null;
     })
     .attr("width", x.bandwidth())
-    .attr("fill", (d) => {
+    .attr("fill", d => {
       return d.name === "carbonate"
         ? "url(#carbonatePattern)"
         : "url(#clasticPattern)";
@@ -65,8 +64,8 @@ export const countBarsGenerator = (props: BarGeneratorProp) => {
     .attr("y", height)
     .transition()
     .duration(500)
-    .attr("y", (d) => y(d.count))
-    .attr("height", (d) => height - y(d.count))
+    .attr("y", d => y(d.count))
+    .attr("height", d => height - y(d.count))
     .each((data, i) => {
       generateValuesTable(svg, width, height, i, data);
     });
@@ -83,9 +82,7 @@ export const tgfBarGenerator = (props: BarGeneratorProp) => {
       e.target.style.stroke = "white";
       tip.attr("x", e.target.x.baseVal.value + midPoint);
       tip.attr("y", e.target.y.baseVal.value);
-      e.target.className.baseVal === "tgf-bar"
-        ? tip.text(`${d.tgf}`)
-        : tip.text("");
+      tip.text(`${d.tgf}`);
     })
     .on("mouseout", (e, d) => {
       e.target.style.stroke = "black";
@@ -104,8 +101,8 @@ export const tgfBarGenerator = (props: BarGeneratorProp) => {
     .attr("y", height)
     .transition()
     .duration(500)
-    .attr("y", (d) => y(d.tgf))
-    .attr("height", (d) => height - y(d.tgf));
+    .attr("y", d => y(d.tgf))
+    .attr("height", d => height - y(d.tgf));
 };
 
 export const trfBarGenerator = (props: BarGeneratorProp) => {
@@ -119,9 +116,7 @@ export const trfBarGenerator = (props: BarGeneratorProp) => {
       e.target.style.stroke = "white";
       tip.attr("x", e.target.x.baseVal.value + midPoint);
       tip.attr("y", e.target.y.baseVal.value);
-      e.target.className.baseVal === "trf-bar"
-        ? tip.text(`${d.trf}`)
-        : tip.text("");
+      tip.text(`${d.trf}`);
     })
     .on("mouseout", (e, d) => {
       e.target.style.stroke = "black";
@@ -133,15 +128,17 @@ export const trfBarGenerator = (props: BarGeneratorProp) => {
       return xVal ? xVal : null;
     })
     .attr("width", width / 2 - 30)
-    .attr("fill", (d) => (d.trf < d.tgf / 2 ? "red" : "rgba(58, 131, 34, 0.7)"))
+    .attr("fill", d =>
+      d.trf < d.tgf / 2 ? chartColors.trfLow : chartColors.trf
+    )
     .attr("stroke", "black")
     .attr("class", "trf-bar")
     .attr("rx", 10)
     .attr("y", height)
     .transition()
     .duration(800)
-    .attr("y", (d) => y(d.trf))
-    .attr("height", (d) => height - y(d.trf));
+    .attr("y", d => y(d.trf))
+    .attr("height", d => height - y(d.trf));
 };
 
 export const kpiGenerator = (props: BarGeneratorProp) => {
@@ -157,7 +154,7 @@ export const kpiGenerator = (props: BarGeneratorProp) => {
       return xVal ? xVal : null;
     })
 
-    .attr("fill", (d) => (d.kpi < 50 ? "red" : "rgba(58, 131, 34, 0.7)"))
+    .attr("fill", d => (d.kpi < 50 ? chartColors.kpiLow : chartColors.kpi))
     .attr("stroke", "white")
     .attr("class", "trf-bar")
     // .attr("rx", 10)
@@ -166,7 +163,7 @@ export const kpiGenerator = (props: BarGeneratorProp) => {
     .attr("height", 15)
     .transition()
     .duration(800)
-    .attr("width", (d) => {
+    .attr("width", d => {
       const xVal = y(d.kpi);
       return xVal ? xVal : null;
     })
@@ -186,7 +183,7 @@ export const kpiGenerator = (props: BarGeneratorProp) => {
         .attr("height", 15)
         // .attr("stroke", "white")
         .attr("x", xVal + 15)
-        .attr("fill", "darkgray")
+        .attr("fill", chartColors.kpiBack)
         // burlywood
         .attr("y", 5);
     });

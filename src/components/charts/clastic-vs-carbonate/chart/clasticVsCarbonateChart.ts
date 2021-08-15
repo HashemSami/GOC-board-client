@@ -101,7 +101,7 @@ export const clasticVsCarbonateChart = (
       // xAxis
       // will also do the scaling for the x values (the fields names)
       const x = bandScale(
-        newData.map((d) => d.name),
+        newData.map(d => d.name),
         [0, width]
       );
       x.padding(0.5);
@@ -167,9 +167,9 @@ export const clasticVsCarbonateChart = (
           const xVal = x(data.name);
           return xVal ? xVal : null;
         })
-        .attr("y", (d) => yCount(d.count))
+        .attr("y", d => yCount(d.count))
         .attr("width", x.bandwidth())
-        .attr("height", (d) => height - yCount(d.count));
+        .attr("height", d => height - yCount(d.count));
 
       // adding to the enter() phase
       // ENTER

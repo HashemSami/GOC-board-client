@@ -8,7 +8,11 @@ import {
   generateBarYAxisRight,
 } from "../../../../services/d3";
 
-import { progressBarGenerator } from "./utils";
+import {
+  progressBarGenerator,
+  tgfBarGenerator,
+  trfBarGenerator,
+} from "./utils";
 
 import { ChartOptions } from "./models";
 import { ChartData } from "./models";
@@ -30,6 +34,11 @@ export const progressChart = (
     .attr("fill", mainTextColor)
     .attr("text-anchor", "middle");
 
+  // generate bars groups
+  const footageBars = svg.append("g");
+  const tgfBar = footageBars.append("g");
+  const trfBar = footageBars.append("g");
+
   // parsentage rect
   const percentRect = svg.append("g");
 
@@ -42,14 +51,19 @@ export const progressChart = (
       ChartTitle.text(`${newData[0].name} target progress`);
 
       const target = newData[0].target;
+      const count = newData[0].count;
+      const gf = newData[0].tgf;
 
       // x scale
       const x = linearScale([0, target], [0, width]);
+      const xFootage = linearScale([0, gf], [0, x(count) + 20]);
       // ------------------------------------------------------------
       // draw rects
 
       // DATA JOIN
       const progressRect = progressBar.selectAll("rect").data(newData);
+      const tgfrect = tgfBar.selectAll("rect").data(newData);
+      const trfrect = trfBar.selectAll("rect").data(newData);
 
       // EXIT
       progressRect
@@ -75,6 +89,18 @@ export const progressChart = (
 
       // adding to the enter() phase
       // ENTER
+
+      tgfBarGenerator({
+        rects: tgfrect,
+        x: xFootage,
+        options: { height, width, svg, bit },
+      });
+
+      trfBarGenerator({
+        rects: trfrect,
+        x: xFootage,
+        options: { height, width, svg, bit },
+      });
 
       progressBarGenerator({
         rects: progressRect,
