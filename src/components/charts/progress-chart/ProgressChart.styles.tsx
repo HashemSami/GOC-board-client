@@ -3,17 +3,23 @@ import styled, { css } from "styled-components";
 interface ChartContainerProps {
   width: number;
   height: number;
+  row?: number;
+  col?: [number, number];
 }
 
 const setWidthAndHeight = (props: ChartContainerProps) => {
   return css`
+    grid-column: ${props.col
+      ? `col ${props.col[0]}/col ${props.col[1]}`
+      : "col 1 / col 7"};
+    grid-row: ${props.row ? props.row : 1};
     width: ${props.width};
     height: ${props.height};
   `;
 };
 
 export const ChartContainer = styled.div<ChartContainerProps>`
-  grid-column: col 1 / col 13;
+  grid-column: col 1 / col 7;
   grid-row: 1;
   display: flex;
   justify-content: center;

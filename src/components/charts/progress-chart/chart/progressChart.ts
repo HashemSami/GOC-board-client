@@ -34,14 +34,15 @@ export const progressChart = (
     .attr("fill", mainTextColor)
     .attr("text-anchor", "middle");
 
+  // parsentage rect
+  const percentRect = svg.append("g");
+
   // generate bars groups
   const footageBars = svg.append("g");
   const tgfBar = footageBars.append("g");
   const trfBar = footageBars.append("g");
 
-  // parsentage rect
-  const percentRect = svg.append("g");
-
+  // progress bar
   const progressBar = svg.append("g");
 
   const bit = svg.append("g");

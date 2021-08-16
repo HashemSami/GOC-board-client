@@ -62,7 +62,8 @@ export const totalCountChart = (
   const xAxisSvg = svg
     .append("g")
     .attr("transform", `translate(0, ${height})`)
-    .attr("class", "axis-bar");
+    .attr("class", "axis-bar")
+    .attr("style", "font-size:0.8em");
 
   const yAxisLeftSvg = svg.append("g").attr("class", "axis-bar");
 
@@ -101,7 +102,7 @@ export const totalCountChart = (
       // xAxis
       // will also do the scaling for the x values (the fields names)
       const x = bandScale(
-        newData.map(d => d.monthName),
+        newData.map((d) => d.monthName),
         [0, width]
       );
       x.padding(0.3);
@@ -135,14 +136,14 @@ export const totalCountChart = (
 
       // ------------------------------------------------------------
 
-      const lineData: [number, number][] = newData.map(d => {
+      const lineData: [number, number][] = newData.map((d) => {
         const xVal = x(d.monthName);
         return [xVal ? xVal + midPoint : 0, yCount(d.count)];
       });
 
       lineGenerator(lineData);
-      lineGenerator.x(d => d[0]);
-      lineGenerator.y(d => d[1]);
+      lineGenerator.x((d) => d[0]);
+      lineGenerator.y((d) => d[1]);
       const line = lineGenerator(lineData);
 
       // draw rects
@@ -174,9 +175,9 @@ export const totalCountChart = (
           const xVal = x(data.monthName);
           return xVal ? xVal : null;
         })
-        .attr("y", d => yCount(d.count))
+        .attr("y", (d) => yCount(d.count))
         .attr("width", x.bandwidth())
-        .attr("height", d => height - yCount(d.count));
+        .attr("height", (d) => height - yCount(d.count));
 
       // adding to the enter() phase
       // ENTER
@@ -209,6 +210,7 @@ export const totalCountChart = (
       countLine
         .style("fill", "transparent")
         .attr("stroke", "brown")
+        // .attr("stroke-dasharray", "8,3,2")
         .attr("stroke-width", 4)
         .transition()
         .duration(350)

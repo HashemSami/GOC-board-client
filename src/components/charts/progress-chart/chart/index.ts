@@ -13,7 +13,7 @@ export const d3Chart = (
 
   // to seperate the data visulaization fro the eadge of
   // the canvas or the svg
-  const margin = { top: 60, bottom: 10, left: 10, right: 10 };
+  const margin = { top: 40, bottom: 10, left: 10, right: 10 };
 
   const chartOptions = {
     height: height - margin.top - margin.bottom,

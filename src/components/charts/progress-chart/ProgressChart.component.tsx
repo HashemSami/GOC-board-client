@@ -8,15 +8,19 @@ interface ChartUpdate {
   updateData: (newData: ChartData) => void;
 }
 
-interface ClasticVsCarbonateChartProps {
+interface ProgressChartProps {
   width: number;
   height: number;
+  row?: number;
+  col?: [number, number];
   updateFunction: (barObj: ChartUpdate) => void;
 }
 
-const ProgressChart: FC<ClasticVsCarbonateChartProps> = ({
+const ProgressChart: FC<ProgressChartProps> = ({
   width,
   height,
+  row,
+  col,
   updateFunction,
 }) => {
   const chartDiv = useRef<HTMLDivElement | null>(null);
@@ -43,6 +47,8 @@ const ProgressChart: FC<ClasticVsCarbonateChartProps> = ({
       ref={chartDiv}
       width={width}
       height={height}
+      row={row}
+      col={col}
     ></ChartContainer>
   );
 };

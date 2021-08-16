@@ -38,7 +38,7 @@ const HomePage: FC = () => {
   };
 
   const onSubmit = (model: { weekends: string[]; name: string }) => {
-    const weekendsNumbers = model.weekends.map(d => parseInt(d));
+    const weekendsNumbers = model.weekends.map((d) => parseInt(d));
     // setWeekendDays(weekendsNumbers);
     console.log(model);
   };
@@ -60,20 +60,46 @@ const HomePage: FC = () => {
       <Item>
         <HideButton />
       </Item>
+
       <Item>
-        <TotalCountChart
+        <ProgressChart
           width={800}
-          height={500}
-          updateFunction={func => {
+          height={190}
+          updateFunction={(func) => {
+            // setBarC(func);s
+          }}
+        />
+        <ProgressChart
+          width={800}
+          height={190}
+          col={[7, 13]}
+          updateFunction={(func) => {
+            // setBarC(func);s
+          }}
+        />
+        <ProgressChart
+          width={800}
+          height={190}
+          row={2}
+          updateFunction={(func) => {
+            // setBarC(func);s
+          }}
+        />
+        <ProgressChart
+          width={800}
+          height={190}
+          row={2}
+          col={[7, 13]}
+          updateFunction={(func) => {
             // setBarC(func);s
           }}
         />
       </Item>
       <Item>
-        <ProgressChart
+        <TotalCountChart
           width={800}
-          height={150}
-          updateFunction={func => {
+          height={500}
+          updateFunction={(func) => {
             // setBarC(func);s
           }}
         />
@@ -82,7 +108,7 @@ const HomePage: FC = () => {
         <ClasticVsCarbonateChart
           width={700}
           height={500}
-          updateFunction={func => {
+          updateFunction={(func) => {
             // setBarC(func);s
           }}
         />
@@ -90,7 +116,7 @@ const HomePage: FC = () => {
           chartType="barChart"
           width={700}
           height={500}
-          updateFunction={func => {
+          updateFunction={(func) => {
             // setBarC(func);s
           }}
         />
@@ -101,7 +127,7 @@ const HomePage: FC = () => {
           chartType="barChart"
           width={700}
           height={500}
-          updateFunction={func => {
+          updateFunction={(func) => {
             // setBarC(func);s
           }}
         />
@@ -111,7 +137,7 @@ const HomePage: FC = () => {
           chartType="barChart"
           width={700}
           height={500}
-          updateFunction={func => {
+          updateFunction={(func) => {
             // setBarC(func);s
           }}
         />
@@ -142,10 +168,10 @@ const HomePage: FC = () => {
               props: {},
             },
           ]}
-          onSubmit={model => {
+          onSubmit={(model) => {
             onSubmit(model);
           }}
-          getOnChangeValues={values => handleSttingsOnChange(values)}
+          getOnChangeValues={(values) => handleSttingsOnChange(values)}
         />
       </Item>
       <Item>
@@ -157,7 +183,7 @@ const HomePage: FC = () => {
           chartType="barChart"
           width={500}
           height={300}
-          updateFunction={func => {
+          updateFunction={(func) => {
             setBarC(func);
           }}
         />
@@ -167,7 +193,7 @@ const HomePage: FC = () => {
           chartType="barChart"
           width={500}
           height={300}
-          updateFunction={func => {
+          updateFunction={(func) => {
             setBarC2(func);
           }}
         />

@@ -76,7 +76,7 @@ export const countBarsGenerator = (
     .transition()
     .duration(500)
     .style("opacity", 1)
-    .attr("cy", d => y(d.count))
+    .attr("cy", (d) => y(d.count))
     .each((data, i) => {
       // generateValuesTable(svg, width, height, i, data, x);
     });
@@ -110,12 +110,13 @@ export const tgfBarGenerator = (props: BarGeneratorProp) => {
     .attr("fill", "url(#tgfPattern)")
     .attr("stroke", chartColors.footageStroke)
     .attr("class", "tgf-bar")
-    .attr("rx", 10)
+    .attr("rx", 170)
+    .attr("ry", 8)
     .attr("y", height)
     .transition()
     .duration(1000)
-    .attr("y", d => y(d.tgf))
-    .attr("height", d => height - y(d.tgf));
+    .attr("y", (d) => y(d.tgf))
+    .attr("height", (d) => height - y(d.tgf));
 };
 
 export const trfBarGenerator = (props: BarGeneratorProp) => {
@@ -144,17 +145,18 @@ export const trfBarGenerator = (props: BarGeneratorProp) => {
       return xVal ? xVal : null;
     })
     .attr("width", barWidth)
-    .attr("fill", d =>
+    .attr("fill", (d) =>
       d.trf < d.tgf / 2 ? chartColors.trfLow : chartColors.trf
     )
     .attr("stroke", chartColors.footageStroke)
     .attr("class", "trf-bar")
-    .attr("rx", 10)
+    .attr("rx", 170)
+    .attr("ry", 8)
     .attr("y", height)
     .transition()
     .duration(1400)
-    .attr("y", d => y(d.trf))
-    .attr("height", d => height - y(d.trf));
+    .attr("y", (d) => y(d.trf))
+    .attr("height", (d) => height - y(d.trf));
 };
 
 export const kpiGenerator = (props: BarGeneratorProp) => {
@@ -170,7 +172,7 @@ export const kpiGenerator = (props: BarGeneratorProp) => {
       return xVal ? xVal : null;
     })
 
-    .attr("fill", d => (d.kpi < 50 ? chartColors.kpiLow : chartColors.kpi))
+    .attr("fill", (d) => (d.kpi < 50 ? chartColors.kpiLow : chartColors.kpi))
     .attr("stroke", "white")
     .attr("class", "trf-bar")
     // .attr("rx", 10)
@@ -179,7 +181,7 @@ export const kpiGenerator = (props: BarGeneratorProp) => {
     .attr("height", 15)
     .transition()
     .duration(800)
-    .attr("width", d => {
+    .attr("width", (d) => {
       const xVal = y(d.kpi);
       return xVal ? xVal : null;
     })

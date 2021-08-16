@@ -1,5 +1,5 @@
 export const chartColors = {
-  trf: "rgba(14, 44, 17, 0.9)",
+  trf: "rgba(14, 44, 17, 0.7)",
   trfLow: "rgba(255, 0, 0, 0.9)",
   footageStroke: "black",
   countLine: "brown",
