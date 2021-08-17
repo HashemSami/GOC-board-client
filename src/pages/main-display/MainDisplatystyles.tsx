@@ -1,7 +1,7 @@
 import styled from "styled-components";
 
-export const HomePageContainer = styled.div`
-  grid-row: main-body;
+export const MainDisplayContainer = styled.div`
+  /* grid-row: main-body; */
   grid-column: col 1 / col 13;
   /* min-height: 100%; */
   background-color: #75bfc2;
@@ -19,9 +19,9 @@ export const HomePageContainer = styled.div`
 export const Item = styled.div`
   grid-column: col 1 / col 13;
   /* grid-row: header; */
-  background-color: #e67914;
+  background-color: #005457;
 
-  /* padding: 20px; */
+  padding: 20px;
   display: grid;
   grid-template-columns: repeat(12, [col] 1fr);
   grid-auto-rows: minmax(100px, auto);
@@ -33,6 +33,6 @@ export const Item = styled.div`
   row-gap: 1vh;
 
   @media (min-width: 901px) {
-    grid-column: col 1 / col 13;
+    grid-column: col 3 / col 13;
   }
 `;

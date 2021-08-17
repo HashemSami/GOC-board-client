@@ -1,8 +1,7 @@
 import { generateBitIcon } from "../../../../services/d3/bitD3";
 import { DataModel } from "./models";
 import { chartColors } from "../../../../styles/colors";
-import { svg } from "d3";
-
+import { linearScale } from "../../../../services/d3";
 interface BarGeneratorProp {
   rects: d3.Selection<d3.BaseType, DataModel, SVGGElement, unknown>;
   x: d3.ScaleLinear<number, number, never>;
@@ -18,7 +17,7 @@ export const progressBarGenerator = async (props: BarGeneratorProp) => {
   const { rects, x, options } = props;
   const { height, width, svg, bit } = options;
   const progressHight = 15;
-  const y = height / 1.4;
+  const y = height / 2;
 
   const bitIcon = await generateBitIcon();
 
@@ -43,94 +42,9 @@ export const progressBarGenerator = async (props: BarGeneratorProp) => {
       return xVal ? xVal : null;
     })
     .each((d, i) => {
-      svg
-        .append("rect")
-        .attr("fill", "none")
-        .attr("stroke", "white")
-        .attr("stroke-width", "2")
-        .attr("x", 0)
-        .attr("y", 0)
-        .attr("width", width)
-        .attr("height", 65);
+      // counting text
 
-      svg
-        .append("text")
-        .attr("x", 5)
-        .attr("y", 20)
-        .attr("style", "font-weight: bold;stroke:black;stroke-width: 0.4;")
-        .text(`Total Count: ${d.count} wells`);
-
-      svg
-        .append("text")
-        .attr("x", 5)
-        .attr("y", 40)
-        .text(`TGF: ${d.tgf} ft`)
-        .attr("style", "font-weight: bold;stroke:black;stroke-width: 0.4;");
-      svg
-        .append("text")
-        .attr("x", 5)
-        .attr("y", 60)
-        .text(`TRF: ${d.trf} ft`)
-        .attr("style", "font-weight: bold;stroke:black;stroke-width: 0.4;");
-      // target text
-      svg
-        .append("text")
-        .attr("text-anchor", "middle")
-        .attr("x", x(d.target) - 50)
-        .attr("y", 25)
-        // .attr("fill", "red")
-        .attr(
-          "style",
-          "font-size: larger;font-family: fantasy;fill: white;stroke:red;stroke-width: 1;"
-        )
-        .text(`Target`);
-      svg
-        .append("text")
-        .attr("text-anchor", "middle")
-        .attr("x", x(d.target) - 50)
-        .attr("y", 55)
-        .attr(
-          "style",
-          "font-size: larger;font-family: fantasy;fill: white;stroke:red;stroke-width: 1;"
-        )
-        .text(`${d.target} wells`);
-
-      // percent text
-      svg
-        .append("text")
-        .attr("text-anchor", "middle")
-        .attr("x", x(d.target) / 2)
-        .attr("y", 25)
-        .attr(
-          "style",
-          "font-size: larger;font-family: fantasy;fill: white;stroke:black;stroke-width: 1;"
-        )
-        .text(`Completed`);
-      svg
-        .append("text")
-        .attr("text-anchor", "middle")
-        .attr("x", x(d.target) / 2)
-        .attr(
-          "style",
-          "font-size: larger;font-family: fantasy;fill: white;stroke:black;stroke-width: 1;"
-        )
-        .attr("y", 55)
-        .text(`${d.kpi} %`);
-
-      // add target rect
-      svg
-        .append("rect")
-        // .attr("transform", `translate(0, ${5})`)
-        .attr("width", x(d.target))
-        .attr("height", 50)
-        .attr("class", "target")
-        .attr("ry", 170)
-        .attr("rx", 8)
-        // .attr("stroke", "white")
-        .attr("x", 0)
-        .attr("fill", "darkgray")
-        // burlywood
-        .attr("y", y - 20);
+      generateProgressText(svg, x, height, width, d);
 
       // add bit icon
       bit
@@ -147,7 +61,7 @@ export const tgfBarGenerator = (props: BarGeneratorProp) => {
   const { rects, x, options } = props;
   const { height, width } = options;
 
-  const y = height / 1.4;
+  const y = height / 2;
 
   rects
     .enter()
@@ -179,7 +93,7 @@ export const tgfBarGenerator = (props: BarGeneratorProp) => {
 export const trfBarGenerator = (props: BarGeneratorProp) => {
   const { rects, x, options } = props;
   const { height, width, svg } = options;
-  const y = height / 1.4;
+  const y = height / 2;
 
   rects
     .enter()
@@ -207,4 +121,190 @@ export const trfBarGenerator = (props: BarGeneratorProp) => {
     .transition()
     .duration(1400)
     .attr("width", (d) => x(d.trf));
+};
+
+const generateProgressText = (
+  svg: d3.Selection<SVGGElement, unknown, null, undefined>,
+  x: d3.ScaleLinear<number, number, never>,
+  height: number,
+  width: number,
+  d: DataModel
+) => {
+  const y = height / 2;
+  const xKpi = linearScale([0, 100], [0, 160]);
+  // kpi rect
+  svg
+    .append("text")
+    .attr("x", x(d.target) / 2)
+    .attr("y", 15)
+    .attr("text-anchor", "middle")
+    .attr("style", "font-weight: bold;stroke:black;stroke-width: 0.4;")
+    .text(`Total KPI`);
+
+  svg
+    .append("rect")
+    .attr("fill", "darkgrey")
+    // .attr("stroke", "white")
+    .attr("stroke-width", "2")
+    .attr("x", x(d.target) / 2 - 80)
+    .attr("y", 45)
+    .attr("rx", 8)
+    .attr("width", 160)
+    .attr("height", 15);
+
+  svg
+    .append("rect")
+    .attr("fill", "red")
+    .attr("stroke", "white")
+    // .attr("stroke-width", "2")
+    .attr("x", x(d.target) / 2 - 80)
+    .attr("y", 45)
+    .attr("rx", 8)
+    .attr("width", xKpi((d.trf / d.tgf) * 100))
+    .attr("height", 15);
+
+  svg
+    .append("text")
+    .attr("x", x(d.target) / 2)
+    .attr("y", 35)
+    .attr("text-anchor", "middle")
+    .attr("style", "font-weight: bold;stroke:black;stroke-width: 0.4;")
+    .text(`${(d.trf / d.tgf) * 100} %`);
+
+  svg
+    .append("rect")
+    .attr("x", 0)
+    .attr("y", y + 40)
+    .attr("rx", 8)
+    .attr("width", x(d.target))
+    .attr("height", 60)
+    .attr("style", "fill: darkslategray;stroke: white;stroke-width: 2;");
+  // count text
+  svg
+    .append("text")
+    .attr("x", x(d.target) / 6)
+    .attr("y", y + 65)
+    .attr("text-anchor", "middle")
+    .attr("style", "font-weight: bold;stroke:black;stroke-width: 0.4;")
+    .text(`Total Count`);
+  svg
+    .append("text")
+    .attr("x", x(d.target) / 6)
+    .attr("y", y + 85)
+    .attr("text-anchor", "middle")
+    .attr("style", "font-weight: bold;stroke:black;stroke-width: 0.4;")
+    .text(`${d.count} wells`);
+
+  // tgf text
+  svg
+    .append("text")
+    .attr("x", x(d.target) / 2)
+    .attr("y", y + 65)
+    .attr("text-anchor", "middle")
+    .text(`TGF`)
+    .attr("style", "font-weight: bold;stroke:black;stroke-width: 0.4;");
+  svg
+    .append("text")
+    .attr("x", x(d.target) / 2)
+    .attr("y", y + 85)
+    .attr("text-anchor", "middle")
+    .text(`${d.tgf} ft`)
+    .attr("style", "font-weight: bold;stroke:black;stroke-width: 0.4;");
+
+  // trf text
+  svg
+    .append("text")
+    .attr("x", x(d.target) / 1.2)
+    .attr("y", y + 65)
+    .attr("text-anchor", "middle")
+    .text(`TRF`)
+    .attr("style", "font-weight: bold;stroke:black;stroke-width: 0.4;");
+  svg
+    .append("text")
+    .attr("x", x(d.target) / 1.2)
+    .attr("y", y + 85)
+    .attr("text-anchor", "middle")
+    .text(`${d.trf} ft`)
+    .attr("style", "font-weight: bold;stroke:black;stroke-width: 0.4;");
+
+  // target text
+  svg
+    .append("rect")
+    .attr("fill", "chocolate")
+    .attr("stroke", "white")
+    .attr("stroke-width", "2")
+    .attr("x", x(d.target) - 60 * 2)
+    .attr("y", 0)
+    .attr("rx", 8)
+    .attr("width", 60 * 2)
+    .attr("height", 65);
+  svg
+    .append("text")
+    .attr("text-anchor", "middle")
+    .attr("x", x(d.target) - 60)
+    .attr("y", 25)
+    // .attr("fill", "red")
+    .attr(
+      "style",
+      "font-size: larger;font-family: fantasy;fill: white;stroke:brown;stroke-width: 1;"
+    )
+    .text(`Target`);
+  svg
+    .append("text")
+    .attr("text-anchor", "middle")
+    .attr("x", x(d.target) - 60)
+    .attr("y", 55)
+    .attr(
+      "style",
+      "font-size: larger;font-family: fantasy;fill: white;stroke:brown;stroke-width: 1;"
+    )
+    .text(`${d.target} wells`);
+
+  // percent text
+  svg
+    .append("rect")
+    .attr("fill", "forestgreen")
+    .attr("stroke", "white")
+    .attr("stroke-width", "2")
+    .attr("x", 0)
+    .attr("y", 0)
+    .attr("rx", 8)
+    // .attr("ry", 210)
+    .attr("width", 60 * 2)
+    .attr("height", 65);
+  svg
+    .append("text")
+    .attr("text-anchor", "middle")
+    .attr("x", 60)
+    .attr("y", 25)
+    .attr(
+      "style",
+      "font-size: larger;font-family: fantasy;fill: white;stroke:black;stroke-width: 1;"
+    )
+    .text(`Completed`);
+  svg
+    .append("text")
+    .attr("text-anchor", "middle")
+    .attr("x", 60)
+    .attr(
+      "style",
+      "font-size: larger;font-family: fantasy;fill: white;stroke:black;stroke-width: 1;"
+    )
+    .attr("y", 55)
+    .text(`${d.kpi} %`);
+
+  // add target rect
+  svg
+    .append("rect")
+    // .attr("transform", `translate(0, ${5})`)
+    .attr("width", x(d.target))
+    .attr("height", 50)
+    .attr("class", "target")
+    .attr("ry", 170)
+    .attr("rx", 8)
+    // .attr("stroke", "white")
+    .attr("x", 0)
+    .attr("fill", "darkgray")
+    // burlywood
+    .attr("y", y - 20);
 };

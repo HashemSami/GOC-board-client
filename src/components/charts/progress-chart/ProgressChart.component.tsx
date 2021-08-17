@@ -37,7 +37,7 @@ const ProgressChart: FC<ProgressChartProps> = ({
 
     updateFunction(progressChart);
     progressChart.updateData([
-      { name: "GOC", tgf: 2000, trf: 1500, count: 450, kpi: 20, target: 700 },
+      { name: "GOC", tgf: 3000, trf: 1500, count: 450, kpi: 20, target: 1500 },
     ]);
     setBarC(progressChart);
   }, []);

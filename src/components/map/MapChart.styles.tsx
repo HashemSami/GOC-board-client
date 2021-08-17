@@ -18,7 +18,6 @@ export const DynamicChartContainer = styled.div<ChartContainerProps>`
   display: flex;
   justify-content: center;
   align-items: center;
-  margin-left: 20px;
   .boundary {
     /* fill: #b3854a; */
     stroke: black;

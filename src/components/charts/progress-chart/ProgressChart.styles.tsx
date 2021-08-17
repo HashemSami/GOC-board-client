@@ -11,7 +11,7 @@ const setWidthAndHeight = (props: ChartContainerProps) => {
   return css`
     grid-column: ${props.col
       ? `col ${props.col[0]}/col ${props.col[1]}`
-      : "col 1 / col 7"};
+      : "col 1 / col 13"};
     grid-row: ${props.row ? props.row : 1};
     width: ${props.width};
     height: ${props.height};
@@ -19,13 +19,13 @@ const setWidthAndHeight = (props: ChartContainerProps) => {
 };
 
 export const ChartContainer = styled.div<ChartContainerProps>`
-  grid-column: col 1 / col 7;
+  grid-column: col 1 / col 13;
   grid-row: 1;
   display: flex;
   justify-content: center;
   align-items: center;
-  margin-right: 20px;
-  margin-left: 20px;
+  /* margin-right: 20px;
+  margin-left: 20px; */
 
   ${setWidthAndHeight}
   svg {
