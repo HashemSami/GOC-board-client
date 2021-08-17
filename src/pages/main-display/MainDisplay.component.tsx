@@ -35,7 +35,7 @@ const MainDisplay: FC = () => {
   };
 
   const onSubmit = (model: { weekends: string[]; name: string }) => {
-    const weekendsNumbers = model.weekends.map((d) => parseInt(d));
+    const weekendsNumbers = model.weekends.map(d => parseInt(d));
     // setWeekendDays(weekendsNumbers);
     console.log(model);
   };
@@ -62,7 +62,7 @@ const MainDisplay: FC = () => {
         <ProgressChart
           width={800}
           height={250}
-          updateFunction={(func) => {
+          updateFunction={func => {
             // setBarC(func);s
           }}
         />
@@ -71,7 +71,7 @@ const MainDisplay: FC = () => {
           height={250}
           row={2}
           col={[1, 5]}
-          updateFunction={(func) => {
+          updateFunction={func => {
             // setBarC(func);s
           }}
         />
@@ -80,7 +80,7 @@ const MainDisplay: FC = () => {
           height={250}
           row={2}
           col={[5, 9]}
-          updateFunction={(func) => {
+          updateFunction={func => {
             // setBarC(func);s
           }}
         />
@@ -89,7 +89,7 @@ const MainDisplay: FC = () => {
           height={250}
           row={2}
           col={[9, 13]}
-          updateFunction={(func) => {
+          updateFunction={func => {
             // setBarC(func);s
           }}
         />
@@ -98,7 +98,7 @@ const MainDisplay: FC = () => {
         <TotalCountChart
           width={800}
           height={500}
-          updateFunction={(func) => {
+          updateFunction={func => {
             // setBarC(func);s
           }}
         />
@@ -107,7 +107,7 @@ const MainDisplay: FC = () => {
         <ClasticVsCarbonateChart
           width={700}
           height={500}
-          updateFunction={(func) => {
+          updateFunction={func => {
             // setBarC(func);s
           }}
         />
@@ -115,28 +115,7 @@ const MainDisplay: FC = () => {
           chartType="barChart"
           width={700}
           height={500}
-          updateFunction={(func) => {
-            // setBarC(func);s
-          }}
-        />
-      </Item>
-
-      <Item>
-        <TimelineNavigator
-          chartType="barChart"
-          width={700}
-          height={500}
-          updateFunction={(func) => {
-            // setBarC(func);s
-          }}
-        />
-      </Item>
-      <Item>
-        <MapChart
-          chartType="barChart"
-          width={700}
-          height={500}
-          updateFunction={(func) => {
+          updateFunction={func => {
             // setBarC(func);s
           }}
         />
@@ -167,10 +146,10 @@ const MainDisplay: FC = () => {
               props: {},
             },
           ]}
-          onSubmit={(model) => {
+          onSubmit={model => {
             onSubmit(model);
           }}
-          getOnChangeValues={(values) => handleSttingsOnChange(values)}
+          getOnChangeValues={values => handleSttingsOnChange(values)}
         />
       </Item>
       <Item>
@@ -182,7 +161,7 @@ const MainDisplay: FC = () => {
           chartType="barChart"
           width={500}
           height={300}
-          updateFunction={(func) => {
+          updateFunction={func => {
             setBarC(func);
           }}
         />
@@ -192,7 +171,7 @@ const MainDisplay: FC = () => {
           chartType="barChart"
           width={500}
           height={300}
-          updateFunction={(func) => {
+          updateFunction={func => {
             setBarC2(func);
           }}
         />

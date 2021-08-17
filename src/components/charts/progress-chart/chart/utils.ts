@@ -37,7 +37,7 @@ export const progressBarGenerator = async (props: BarGeneratorProp) => {
     .attr("height", progressHight)
     .transition()
     .duration(800)
-    .attr("width", (d) => {
+    .attr("width", d => {
       const xVal = x(d.count);
       return xVal ? xVal : null;
     })
@@ -87,7 +87,7 @@ export const tgfBarGenerator = (props: BarGeneratorProp) => {
 
     .transition()
     .duration(900)
-    .attr("width", (d) => x(d.tgf));
+    .attr("width", d => x(d.tgf));
 };
 
 export const trfBarGenerator = (props: BarGeneratorProp) => {
@@ -109,7 +109,7 @@ export const trfBarGenerator = (props: BarGeneratorProp) => {
     //   tipTool.text("");
     // })
     .attr("x", 0)
-    .attr("fill", (d) =>
+    .attr("fill", d =>
       d.trf < d.tgf / 2 ? chartColors.trfLow : chartColors.trf
     )
     .attr("stroke", "black")
@@ -120,7 +120,7 @@ export const trfBarGenerator = (props: BarGeneratorProp) => {
     .attr("height", 50)
     .transition()
     .duration(1400)
-    .attr("width", (d) => x(d.trf));
+    .attr("width", d => x(d.trf));
 };
 
 const generateProgressText = (
@@ -246,9 +246,9 @@ const generateProgressText = (
     // .attr("fill", "red")
     .attr(
       "style",
-      "font-size: larger;font-family: fantasy;fill: white;stroke:brown;stroke-width: 1;"
+      "font-size: larger;font-family: fantasy;fill: darkred;stroke:orange;stroke-width: 1;"
     )
-    .text(`Target`);
+    .text(`TARGET`);
   svg
     .append("text")
     .attr("text-anchor", "middle")
@@ -256,7 +256,7 @@ const generateProgressText = (
     .attr("y", 55)
     .attr(
       "style",
-      "font-size: larger;font-family: fantasy;fill: white;stroke:brown;stroke-width: 1;"
+      "font-size: larger;font-family: fantasy;fill: white;stroke:brown;stroke-width: 0.9;"
     )
     .text(`${d.target} wells`);
 
@@ -279,9 +279,9 @@ const generateProgressText = (
     .attr("y", 25)
     .attr(
       "style",
-      "font-size: larger;font-family: fantasy;fill: white;stroke:black;stroke-width: 1;"
+      "font-size: larger;font-family: fantasy;fill: darkorange;stroke:black;stroke-width: 0.9;"
     )
-    .text(`Completed`);
+    .text(`COMPLETED`);
   svg
     .append("text")
     .attr("text-anchor", "middle")
