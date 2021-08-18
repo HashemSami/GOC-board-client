@@ -1,4 +1,5 @@
 import styled, { css } from "styled-components";
+import { chartColors } from "../../../styles/colors";
 
 interface ChartContainerProps {
   width: number;
@@ -23,7 +24,7 @@ export const ChartContainer = styled.div<ChartContainerProps>`
   ${setWidthAndHeight}
   svg {
     border: 2px solid white;
-    background-color: teal;
+    background-color: ${chartColors.chartBackground};
     .axis-bar {
       line {
         stroke: white;

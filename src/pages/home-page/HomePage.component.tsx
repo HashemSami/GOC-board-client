@@ -9,8 +9,8 @@ import {
   useParams,
 } from "react-router-dom";
 
-import MainDisplay from "../main-display/MainDisplay.component";
-
+import DashboardPage from "../dashboards-page/DashboardPage.component";
+import DataInputPage from "../data-input/DataInputPage.component";
 // import { useActions } from "../../hooks/useActions";
 
 const HomePage: FC = () => {
@@ -21,14 +21,14 @@ const HomePage: FC = () => {
   return (
     <HomePageContainer>
       <Switch>
-        <Route exact path={`${match.path}`}>
+        <Route path={`${match.path}/dashboards`}>
           <Item>
-            <MainDisplay />
+            <DashboardPage />
           </Item>
         </Route>
-        <Route path={`${match.path}/maind`}>
+        <Route path={`${match.path}/datainput`}>
           <Item>
-            <p>Helsssslo</p>
+            <DataInputPage />
           </Item>
         </Route>
       </Switch>

@@ -22,5 +22,5 @@ export const divsColor = {
 export const pagesColors = {
   main: "",
   item: "",
-  header: "",
+  header: "rgb(0,59,89)",
 };

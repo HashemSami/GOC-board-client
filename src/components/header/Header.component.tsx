@@ -1,13 +1,15 @@
 import { FC } from "react";
 
-import { HeaderContainer } from "./Header.styles";
+import { HeaderContainer, HeaderTitle } from "./Header.styles";
 
-import HeaderNav from "../navs/headerNav/HeaderNav.component";
+import HeaderNav from "../navs/header-nav/HeaderNav.component";
 
 const Header: FC = () => {
   return (
-    <HeaderContainer>
-      <h1>GOC board</h1>
+    <HeaderContainer onScroll={(e) => console.log(e)}>
+      <HeaderTitle>
+        <div>GOC Data Display</div>
+      </HeaderTitle>
       <HeaderNav />
     </HeaderContainer>
   );

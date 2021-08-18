@@ -8,10 +8,10 @@ export const AppContainer = styled.div`
   display: grid;
   min-height: 100%;
   grid-template-columns: repeat(12, [col] 1fr);
-  grid-template-rows: [header] auto [main-body] 1fr [footer] auto;
+  grid-template-rows: [header] 120px [main-body] 1fr [footer] auto;
   justify-content: center;
   justify-items: stretch;
   align-items: stretch;
   column-gap: 2vw;
-  row-gap: 2vh;
+  /* row-gap: 2vh; */
 `;
