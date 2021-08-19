@@ -11,7 +11,7 @@ const DataInputSideNav: FC = () => {
   return (
     <DataInputNavContainer>
       <NavItemContainer to={`${match.path}/tdwellreport`}>
-        New TD Report dddss
+        New TD Report
       </NavItemContainer>
       <NavItemContainer to="/main/datainput">Other</NavItemContainer>
     </DataInputNavContainer>

@@ -27,6 +27,7 @@ export const NavItemContainer = styled(Link)`
   margin: 20px 0px;
   color: white;
   width: 80%;
+  height: 2em;
   background-image: linear-gradient(
     to bottom right,
     rgb(231, 74, 74),

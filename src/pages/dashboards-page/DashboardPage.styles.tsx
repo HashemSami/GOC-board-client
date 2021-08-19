@@ -6,7 +6,7 @@ export const DashboardPageContainer = styled.div`
   /* min-height: 100%; */
   background-color: rgb(133, 135, 138);
   display: grid;
-  grid-template-columns: 9em repeat(8, [col] 1fr);
+  grid-template-columns: repeat(9, [col] 1fr);
   grid-auto-rows: minmax(100px, auto);
   justify-content: center;
   justify-items: stretch;
@@ -38,7 +38,7 @@ export const DashboardPageContainer = styled.div`
 // `;
 
 export const SideNavDiv = styled.div`
-  /* grid-column: col 1 / col 2; */
+  grid-column: col 1 / col 2;
   display: flex;
   flex-direction: column;
   /* justify-content: space-around; */

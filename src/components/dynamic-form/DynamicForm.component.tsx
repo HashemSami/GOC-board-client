@@ -1,5 +1,11 @@
 import { FC, useState, Fragment } from "react";
-import { DynamicFormContainer, FormGroup, FormGroupRadio, FormActions, FormTitle } from "./DynamicForm.styles";
+import {
+  DynamicFormContainer,
+  FormGroup,
+  FormGroupRadio,
+  FormActions,
+  FormTitle,
+} from "./DynamicForm.styles";
 
 import { FormModel, RedioProps, SelectOrCheckboxProps } from "../../models";
 
@@ -22,12 +28,25 @@ interface formValuesProps {
   [key: string]: string | number | string[];
 }
 
-const DynamicForm: FC<DynamicFormProps> = ({ title = "Dynamic Form", model, onSubmit, getOnChangeValues }) => {
+const DynamicForm: FC<DynamicFormProps> = ({
+  title = "Dynamic Form",
+  model,
+  onSubmit,
+  getOnChangeValues,
+}) => {
   const [formValues, setFormValues] = useState<formValuesProps | undefined>({});
 
   // const asyncSetState = (values:formValuesProps, callbackFunction) => setFormValues(values, callbackFunction)
 
-  const handleOnChange = async ({ target: { value } }: React.ChangeEvent<HTMLInputElement> | React.ChangeEvent<HTMLSelectElement>, key: string, type: "single" | "multiple" = "single") => {
+  const handleOnChange = async (
+    {
+      target: { value },
+    }:
+      | React.ChangeEvent<HTMLInputElement>
+      | React.ChangeEvent<HTMLSelectElement>,
+    key: string,
+    type: "single" | "multiple" = "single"
+  ) => {
     // console.log(e.target.value);
     const updatestate = () => {
       return new Promise((resolve, reject) => {
@@ -46,7 +65,9 @@ const DynamicForm: FC<DynamicFormProps> = ({ title = "Dynamic Form", model, onSu
             if (formValues[key]) {
               // if the property exist
               // look for the current value in our state
-              const found = (formValues[key] as string[]).find(d => d === value);
+              const found = (formValues[key] as string[]).find(
+                d => d === value
+              );
 
               if (!found) {
                 // const data = formValues[key] ? [value, ...(formValues[key] as string[])] : [value];
@@ -55,14 +76,24 @@ const DynamicForm: FC<DynamicFormProps> = ({ title = "Dynamic Form", model, onSu
                   if (!state) {
                     return;
                   }
-                  return { ...state, [key]: [value, ...(state[key] as string[])] };
+                  return {
+                    ...state,
+                    [key]: [value, ...(state[key] as string[])],
+                  };
                 });
               } else {
                 setFormValues(state => {
                   if (!state) {
                     return;
                   }
-                  return { ...state, [key]: [...(state[key] as string[]).filter(item => value !== item)] };
+                  return {
+                    ...state,
+                    [key]: [
+                      ...(state[key] as string[]).filter(
+                        item => value !== item
+                      ),
+                    ],
+                  };
                 });
               }
             } else {
@@ -107,33 +138,52 @@ const DynamicForm: FC<DynamicFormProps> = ({ title = "Dynamic Form", model, onSu
 
       switch (element) {
         case "input":
-          input = <input key={key} {...(props as InputHTML)} value={stateValue} onChange={e => handleOnChange(e, key)} />;
+          input = (
+            <input
+              key={key}
+              {...(props as InputHTML)}
+              value={stateValue}
+              onChange={e => handleOnChange(e, key)}
+            />
+          );
           break;
         case "radio":
-          input = (modelElement as RedioProps).options.map(({ key, label, name, value }) => {
-            const checked = value === stateValue;
-            return (
-              <Fragment key={`fr${key}`}>
-                <input key={key} {...(props as InputHTML)} type={element} checked={checked} name={name} value={value} onChange={e => handleOnChange(e, name)} />
-                <label key={`ll${key}`}>{label}</label>
-              </Fragment>
-            );
-          });
+          input = (modelElement as RedioProps).options.map(
+            ({ key, label, name, value }) => {
+              const checked = value === stateValue;
+              return (
+                <Fragment key={`fr${key}`}>
+                  <input
+                    key={key}
+                    {...(props as InputHTML)}
+                    type={element}
+                    checked={checked}
+                    name={name}
+                    value={value}
+                    onChange={e => handleOnChange(e, name)}
+                  />
+                  <label key={`ll${key}`}>{label}</label>
+                </Fragment>
+              );
+            }
+          );
           input = <FormGroupRadio>{input}</FormGroupRadio>;
           break;
 
         case "select":
-          input = (modelElement as SelectOrCheckboxProps).options.map(({ key, label, value }) => {
-            const checked = value === stateValue;
+          input = (modelElement as SelectOrCheckboxProps).options.map(
+            ({ key, label, value }) => {
+              const checked = value === stateValue;
 
-            return (
-              <Fragment>
-                <option {...(props as OptionHTML)} key={key} value={value}>
-                  {value}
-                </option>
-              </Fragment>
-            );
-          });
+              return (
+                <Fragment>
+                  <option {...(props as OptionHTML)} key={key} value={value}>
+                    {value}
+                  </option>
+                </Fragment>
+              );
+            }
+          );
           input = (
             <select value={stateValue} onChange={e => handleOnChange(e, key)}>
               {input}
@@ -142,20 +192,34 @@ const DynamicForm: FC<DynamicFormProps> = ({ title = "Dynamic Form", model, onSu
           break;
 
         case "checkbox":
-          input = (modelElement as SelectOrCheckboxProps).options.map(({ key, label, value }) => {
-            let checked = false;
+          input = (modelElement as SelectOrCheckboxProps).options.map(
+            ({ key, label, value }) => {
+              let checked = false;
 
-            if (stateValue && typeof stateValue !== "string" && typeof stateValue !== "number" && stateValue.length > 0) {
-              checked = stateValue.indexOf(value) > -1 ? true : false;
+              if (
+                stateValue &&
+                typeof stateValue !== "string" &&
+                typeof stateValue !== "number" &&
+                stateValue.length > 0
+              ) {
+                checked = stateValue.indexOf(value) > -1 ? true : false;
+              }
+
+              return (
+                <Fragment key={`cfr${key}`}>
+                  <input
+                    {...(props as InputHTML)}
+                    type={element}
+                    key={key}
+                    checked={checked}
+                    value={value}
+                    onChange={e => handleOnChange(e, elementKey, "multiple")}
+                  />
+                  <label key={`ll${key}`}>{label}</label>
+                </Fragment>
+              );
             }
-
-            return (
-              <Fragment key={`cfr${key}`}>
-                <input {...(props as InputHTML)} type={element} key={key} checked={checked} value={value} onChange={e => handleOnChange(e, elementKey, "multiple")} />
-                <label key={`ll${key}`}>{label}</label>
-              </Fragment>
-            );
-          });
+          );
 
           input = <FormGroupRadio>{input}</FormGroupRadio>;
       }
@@ -180,19 +244,18 @@ const DynamicForm: FC<DynamicFormProps> = ({ title = "Dynamic Form", model, onSu
   };
 
   return (
-    <div>
+    <DynamicFormContainer
+      onSubmit={e => {
+        onFormSubmit(e);
+      }}
+    >
       <FormTitle>{title}</FormTitle>
-      <DynamicFormContainer
-        onSubmit={e => {
-          onFormSubmit(e);
-        }}
-      >
-        {renderForm()}
-        <FormActions>
-          <button type="submit">Submit</button>
-        </FormActions>
-      </DynamicFormContainer>
-    </div>
+
+      {renderForm()}
+      <FormActions>
+        <button type="submit">Submit</button>
+      </FormActions>
+    </DynamicFormContainer>
   );
 };
 

@@ -1,6 +1,6 @@
 import { FC, useState } from "react";
 
-import { MainDisplayContainer, Item } from "./MainDisplatystyles";
+import { MainDisplayContainer, Item, WidthItem } from "./MainDisplatystyles";
 
 // import TimelineViewer from "../../components/timeline/timeline-viewer/TimelineViewer.component";
 import DynamicChart from "../../../components/dynamic-chart/DynamicChart.component";
@@ -10,6 +10,7 @@ import ClasticVsCarbonateChart from "../../../components/charts/clastic-vs-carbo
 import ProgressChart from "../../../components/charts/progress-chart/ProgressChart.component";
 import TotalCountChart from "../../../components/charts/total-count-chart/TotalCountChart.component";
 import HideButton from "../../../components/buttons/hide-button/HideButton.component";
+
 import { BarChartObj } from "../../../models";
 
 import { data, data2 } from "../../home-page/testData";
@@ -39,7 +40,7 @@ const MainDisplay: FC = () => {
         <ProgressChart
           width={800}
           height={250}
-          updateFunction={(func) => {
+          updateFunction={func => {
             // setBarC(func);s
           }}
         />
@@ -48,7 +49,7 @@ const MainDisplay: FC = () => {
           height={250}
           row={2}
           col={[1, 5]}
-          updateFunction={(func) => {
+          updateFunction={func => {
             // setBarC(func);s
           }}
         />
@@ -57,7 +58,7 @@ const MainDisplay: FC = () => {
           height={250}
           row={2}
           col={[5, 9]}
-          updateFunction={(func) => {
+          updateFunction={func => {
             // setBarC(func);s
           }}
         />
@@ -66,16 +67,16 @@ const MainDisplay: FC = () => {
           height={250}
           row={2}
           col={[9, 13]}
-          updateFunction={(func) => {
+          updateFunction={func => {
             // setBarC(func);s
           }}
         />
       </Item>
       <Item>
         <TotalCountChart
-          width={1000}
+          width={800}
           height={500}
-          updateFunction={(func) => {
+          updateFunction={func => {
             // setBarC(func);s
           }}
         />
@@ -84,7 +85,7 @@ const MainDisplay: FC = () => {
         <ClasticVsCarbonateChart
           width={700}
           height={500}
-          updateFunction={(func) => {
+          updateFunction={func => {
             // setBarC(func);s
           }}
         />
@@ -92,7 +93,7 @@ const MainDisplay: FC = () => {
           chartType="barChart"
           width={700}
           height={500}
-          updateFunction={(func) => {
+          updateFunction={func => {
             // setBarC(func);s
           }}
         />
@@ -106,7 +107,7 @@ const MainDisplay: FC = () => {
           chartType="barChart"
           width={500}
           height={300}
-          updateFunction={(func) => {
+          updateFunction={func => {
             setBarC(func);
           }}
         />
@@ -116,10 +117,13 @@ const MainDisplay: FC = () => {
           chartType="barChart"
           width={500}
           height={300}
-          updateFunction={(func) => {
+          updateFunction={func => {
             setBarC2(func);
           }}
         />
+      </Item>
+      <Item>
+        <WidthItem></WidthItem>
       </Item>
       {/* <Item>item2</Item>
       <Item>item3</Item>

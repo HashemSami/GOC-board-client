@@ -1,12 +1,13 @@
 import styled from "styled-components";
 
 export const DynamicFormContainer = styled.form`
+  grid-column: col 1 / col 13;
   box-shadow: 2px 6px 8px gray;
   margin-bottom: 5px;
   padding-top: 5px;
   padding-bottom: 5px;
   margin: 10px 2px;
-  max-width: 650px;
+  /* max-width: 650px; */
 `;
 
 export const FormGroup = styled.div`

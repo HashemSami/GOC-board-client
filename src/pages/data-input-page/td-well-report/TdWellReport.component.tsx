@@ -1,12 +1,12 @@
 import { FC } from "react";
 
-import { TdWellReportContainer, Item } from "./TdWellReport.styles";
+import { TdWellReportContainer, Item, WidthItem } from "./TdWellReport.styles";
 
 import DynamicForm from "../../../components/dynamic-form/DynamicForm.component";
 
 const TdWellReport: FC = () => {
   const onSubmit = (model: { weekends: string[]; name: string }) => {
-    const weekendsNumbers = model.weekends.map((d) => parseInt(d));
+    const weekendsNumbers = model.weekends.map(d => parseInt(d));
     // setWeekendDays(weekendsNumbers);
     console.log(model);
   };
@@ -51,11 +51,14 @@ const TdWellReport: FC = () => {
               props: {},
             },
           ]}
-          onSubmit={(model) => {
+          onSubmit={model => {
             onSubmit(model);
           }}
-          getOnChangeValues={(values) => handleSttingsOnChange(values)}
+          getOnChangeValues={values => handleSttingsOnChange(values)}
         />
+      </Item>
+      <Item>
+        <WidthItem></WidthItem>
       </Item>
     </TdWellReportContainer>
   );
