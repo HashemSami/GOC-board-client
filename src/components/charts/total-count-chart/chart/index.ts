@@ -32,7 +32,6 @@ export const d3Chart = (
     .append("g")
     .attr("transform", `translate(${margin.left},${margin.top})`);
 
-  console.log(svg);
   const getChartOptions = () => chartOptions;
   const setChartOptions = (option: ChartOptions) => {
     Object.assign(chartOptions, option);

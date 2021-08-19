@@ -113,8 +113,8 @@ export const tgfBarGenerator = (props: BarGeneratorProp) => {
     .attr("rx", 170)
     .attr("ry", 8)
     .attr("y", height)
-    .transition()
-    .duration(1000)
+    // .transition()
+    // .duration(1000)
     .attr("y", (d) => y(d.tgf))
     .attr("height", (d) => height - y(d.tgf));
 };
@@ -153,8 +153,8 @@ export const trfBarGenerator = (props: BarGeneratorProp) => {
     .attr("rx", 170)
     .attr("ry", 8)
     .attr("y", height)
-    .transition()
-    .duration(1400)
+    // .transition()
+    // .duration(1400)
     .attr("y", (d) => y(d.trf))
     .attr("height", (d) => height - y(d.trf));
 };

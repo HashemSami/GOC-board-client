@@ -1,18 +1,18 @@
 import styled from "styled-components";
 
-export const DashboardPageContainer = styled.div`
+export const DataInputPageContainer = styled.div`
   /* grid-row: main-body; */
   grid-column: col 1 / col 13;
   /* min-height: 100%; */
   background-color: rgb(133, 135, 138);
   display: grid;
-  grid-template-columns: 9em repeat(8, [col] 1fr);
+  grid-template-columns: 9em repeat(7, [col] 1fr);
   grid-auto-rows: minmax(100px, auto);
   justify-content: center;
   justify-items: stretch;
   align-items: stretch;
   /* align-content: stretch; */
-  column-gap: 1vw;
+  column-gap: 2vw;
   row-gap: 2vh;
 `;
 

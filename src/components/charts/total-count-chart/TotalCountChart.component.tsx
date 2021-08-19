@@ -82,6 +82,7 @@ const TotalCountChart: FC<TotalCountChartProps> = ({
 
     progressChart.updateData(testData);
     setBarC(progressChart);
+    console.log("e chart width", chartDiv.current.clientWidth);
   }, []);
 
   return (

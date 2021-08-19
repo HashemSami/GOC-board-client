@@ -2,7 +2,7 @@ import styled from "styled-components";
 
 import { Link } from "react-router-dom";
 
-export const DashboardNavContainer = styled.div`
+export const DataInputNavContainer = styled.div`
   /* grid-column: col 1 / col 3; */
   display: flex;
   flex-direction: column;
@@ -26,6 +26,7 @@ export const NavItemContainer = styled(Link)`
   padding: 10px 15px;
   margin: 20px 0px;
   color: white;
+  width: 80%;
   background-image: linear-gradient(
     to bottom right,
     rgb(231, 74, 74),

@@ -1,12 +1,12 @@
 import styled from "styled-components";
 
-export const DataInputContainer = styled.div`
+export const MainDisplayContainer = styled.div`
   /* grid-row: main-body; */
-  grid-column: col 1 / col 13;
+  grid-column: col 1 / col 9;
   /* min-height: 100%; */
-  background-color: #75bfc2;
+  background-color: rgb(133, 135, 138);
   display: grid;
-  grid-template-columns: repeat(12, [col] auto);
+  grid-template-columns: repeat(12, [col] 1fr);
   grid-auto-rows: minmax(100px, auto);
   justify-content: center;
   justify-items: stretch;
@@ -19,20 +19,20 @@ export const DataInputContainer = styled.div`
 export const Item = styled.div`
   grid-column: col 1 / col 13;
   /* grid-row: header; */
-  background-color: #005457;
+  background-color: rgb(6, 70, 94);
 
   padding: 20px;
   display: grid;
   grid-template-columns: repeat(12, [col] 1fr);
   grid-auto-rows: minmax(100px, auto);
-  justify-content: center;
-  /* justify-items: stretch; */
-  /* align-items: stretch; */
-  /* align-content: stretch; */
+  /* justify-content: center; */
+  justify-items: stretch;
+  align-items: stretch;
+  align-content: stretch;
   column-gap: 1vw;
   row-gap: 1vh;
 
   @media (min-width: 901px) {
-    grid-column: col 3 / col 13;
+    grid-column: col 1 / col 13;
   }
 `;

@@ -5,13 +5,16 @@ import {
   NavItemContainer,
 } from "./DashboardSideNav.styles";
 
+import { useRouteMatch } from "react-router-dom";
+
 const DashboardSideNav: FC = () => {
+  const match = useRouteMatch();
   return (
     <DashboardNavContainer>
-      <NavItemContainer to="/main/dashboards/maindisplay">
+      <NavItemContainer to={`${match.path}/maindisplay`}>
         Main Display
       </NavItemContainer>
-      <NavItemContainer to="/main/datainput">Data Input</NavItemContainer>
+      <NavItemContainer to="/main/datainput">Other</NavItemContainer>
     </DashboardNavContainer>
   );
 };

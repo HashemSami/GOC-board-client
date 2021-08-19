@@ -10,7 +10,7 @@ import {
 } from "react-router-dom";
 
 import DashboardPage from "../dashboards-page/DashboardPage.component";
-import DataInputPage from "../data-input/DataInputPage.component";
+import DataInputPage from "../data-input-page/DataInputPage.component";
 // import { useActions } from "../../hooks/useActions";
 
 const HomePage: FC = () => {

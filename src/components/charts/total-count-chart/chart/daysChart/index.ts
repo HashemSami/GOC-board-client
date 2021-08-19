@@ -107,6 +107,8 @@ export const generateDaysChart = (
   return {
     updateData: (newData: DataModel) => {
       group
+        .transition()
+        .duration(500)
         .attr("width", width + margin.left + margin.right)
         .attr("height", height + margin.top + margin.bottom);
       background
@@ -122,7 +124,7 @@ export const generateDaysChart = (
       console.log(daysData);
 
       const monthData = daysData[newData.monthName];
-      const chartData = Object.keys(monthData).map(d => monthData[d]);
+      const chartData = Object.keys(monthData).map((d) => monthData[d]);
       const monthName = `${chartData[0].monthName} ${chartData[0].year}`;
 
       ChartTitle.text(monthName);
@@ -130,7 +132,7 @@ export const generateDaysChart = (
       // xAxis
       // will also do the scaling for the x values (the fields names)
       const x = bandScale(
-        chartData.map(d => d.dayNumber),
+        chartData.map((d) => d.dayNumber),
         [0, width]
       );
       x.padding(0.3);
@@ -164,14 +166,14 @@ export const generateDaysChart = (
 
       // ------------------------------------------------------------
 
-      const lineData: [number, number][] = chartData.map(d => {
+      const lineData: [number, number][] = chartData.map((d) => {
         const xVal = x(d.dayNumber);
         return [xVal ? xVal + midPoint : 0, yCount(d.count)];
       });
 
       lineGenerator(lineData);
-      lineGenerator.x(d => d[0]);
-      lineGenerator.y(d => d[1]);
+      lineGenerator.x((d) => d[0]);
+      lineGenerator.y((d) => d[1]);
       const line = lineGenerator(lineData);
 
       // draw rects
@@ -219,7 +221,7 @@ export const generateDaysChart = (
           const xVal = x(data.dayNumber);
           return xVal ? xVal + midPoint : null;
         })
-        .attr("cy", d => yCount(d.count));
+        .attr("cy", (d) => yCount(d.count));
       // .attr("width", x.bandwidth())
       // .attr("height", d => height - yCount(d.count));
 
@@ -230,8 +232,8 @@ export const generateDaysChart = (
           return xVal ? xVal : null;
         })
         .attr("y", height)
-        .attr("y", d => yTgf(d.tgf))
-        .attr("height", d => height - yTgf(d.tgf));
+        .attr("y", (d) => yTgf(d.tgf))
+        .attr("height", (d) => height - yTgf(d.tgf));
 
       trfrect
         .attr("x", (data, i) => {
@@ -242,8 +244,8 @@ export const generateDaysChart = (
         .attr("y", height)
         // .transition()
         // .duration(1400)
-        .attr("y", d => yTgf(d.trf))
-        .attr("height", d => height - yTgf(d.trf));
+        .attr("y", (d) => yTgf(d.trf))
+        .attr("height", (d) => height - yTgf(d.trf));
 
       // adding to the enter() phase
       // ENTER

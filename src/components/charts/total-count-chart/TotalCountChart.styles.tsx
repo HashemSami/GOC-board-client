@@ -19,6 +19,7 @@ export const ChartContainer = styled.div<ChartContainerProps>`
   display: flex;
   justify-content: center;
   align-items: center;
+  /* width: 90pc; */
 
   ${setWidthAndHeight}
   svg {

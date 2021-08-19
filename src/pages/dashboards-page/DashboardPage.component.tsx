@@ -10,7 +10,7 @@ import {
 
 import { Switch, Route, Redirect } from "react-router-dom";
 
-import MainDisplay from "../main-display/MainDisplay.component";
+import MainDisplay from "./main-display/MainDisplay.component";
 import DashboardSideNav from "../../components/navs/side-nav/dashbord-side-nav/DashboardSideNav.component";
 
 const DashboardPage: FC = () => {

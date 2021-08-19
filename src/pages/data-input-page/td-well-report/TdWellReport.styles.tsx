@@ -1,8 +1,8 @@
 import styled from "styled-components";
 
-export const MainDisplayContainer = styled.div`
+export const TdWellReportContainer = styled.div`
   /* grid-row: main-body; */
-  grid-column: col 2 / col 14;
+  grid-column: col 1 / col 9;
   /* min-height: 100%; */
   background-color: rgb(133, 135, 138);
   display: grid;
