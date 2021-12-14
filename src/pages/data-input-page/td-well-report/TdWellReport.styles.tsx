@@ -2,7 +2,7 @@ import styled from "styled-components";
 
 export const TdWellReportContainer = styled.div`
   /* grid-row: main-body; */
-  grid-column: col 2 / col 10;
+  grid-column: col 2 / col 13;
   /* min-height: 100%; */
   background-color: rgb(133, 135, 138);
   display: grid;
@@ -39,5 +39,35 @@ export const Item = styled.div`
 
 export const WidthItem = styled.div`
   grid-column: 1 col / 13 col;
-  width: calc(1vw * 100);
+  width: calc(1vw * 90);
+`;
+
+export const FormContainer = styled.div`
+  grid-column: 1 col / 13 col;
+  color: white;
+  /* background-color: teal; */
+  padding: 10px;
+  border: 2px solid white;
+  button {
+    background-image: linear-gradient(
+      to bottom right,
+      rgb(231, 74, 74),
+      rgb(201, 70, 70),
+      rgb(172, 48, 48)
+    );
+    padding: 10px 20px;
+    font-size: 1em;
+    color: white;
+    border-radius: 8px;
+    border: 1px solid white;
+    :hover {
+      background-image: linear-gradient(
+        to bottom right,
+        rgb(246, 250, 245),
+        rgb(201, 70, 70),
+        rgb(172, 48, 48)
+      );
+      cursor: pointer;
+    }
+  }
 `;

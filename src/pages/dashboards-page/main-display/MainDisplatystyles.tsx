@@ -39,5 +39,5 @@ export const Item = styled.div`
 
 export const WidthItem = styled.div`
   grid-column: 1 col / 13 col;
-  width: calc(1vw * 100);
+  width: calc(1vw * 85);
 `;

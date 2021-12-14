@@ -38,7 +38,7 @@ export const DataInputPageContainer = styled.div`
 // `;
 
 export const SideNavDiv = styled.div`
-  grid-column: col 1 / col 2;
+  grid-column: col 1 / col 3;
   display: flex;
   flex-direction: column;
   /* justify-content: space-around; */
