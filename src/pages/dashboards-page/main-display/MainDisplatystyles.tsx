@@ -1,4 +1,4 @@
-import styled from "styled-components";
+import styled, { css } from "styled-components";
 
 export const MainDisplayContainer = styled.div`
   /* grid-row: main-body; */
@@ -37,7 +37,17 @@ export const Item = styled.div`
   }
 `;
 
-export const WidthItem = styled.div`
+interface WidthItemProps {
+  setWidth: number;
+}
+
+const setWidth = (width: WidthItemProps) => {
+  return css`
+    width: ${width.setWidth};
+  `;
+};
+
+export const WidthItem = styled.div<WidthItemProps>`
   grid-column: 1 col / 13 col;
   width: calc(1vw * 85);
 `;

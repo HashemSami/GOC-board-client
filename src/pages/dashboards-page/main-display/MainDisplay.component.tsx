@@ -123,7 +123,7 @@ const MainDisplay: FC = () => {
         />
       </Item>
       <Item>
-        <WidthItem></WidthItem>
+        <WidthItem setWidth={window.innerWidth}></WidthItem>
       </Item>
       {/* <Item>item2</Item>
       <Item>item3</Item>
