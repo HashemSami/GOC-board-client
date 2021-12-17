@@ -2,22 +2,6 @@ import styled from "styled-components";
 
 import { Link } from "react-router-dom";
 
-export const DashboardNavContainer = styled.div`
-  /* grid-column: col 1 / col 3; */
-  display: flex;
-  flex-direction: column;
-  /* justify-content: space-around; */
-  align-items: stretch;
-  padding: 50px 10px;
-  overflow-y: auto;
-  /* padding: 0px 300px; */
-  background-color: teal;
-  /* fixed  */
-  width: 8em;
-  position: fixed;
-  height: 100vh;
-`;
-
 export const NavItemContainer = styled(Link)`
   border: 2px solid white;
   /* border-bottom: none; */

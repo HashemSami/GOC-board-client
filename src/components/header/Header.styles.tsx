@@ -6,6 +6,7 @@ export const HeaderContainer = styled.div`
   /* grid-row: header; */
   background-color: gray;
   text-align: center;
+  z-index: 1;
 
   display: flex;
   flex-direction: column;

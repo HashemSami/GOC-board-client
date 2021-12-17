@@ -9,6 +9,7 @@ import TimelineNavigator from "../../../components/time-line-navigator/TimelineN
 import ClasticVsCarbonateChart from "../../../components/charts/clastic-vs-carbonate/ClasticVsCarbonate.component";
 import ProgressChart from "../../../components/charts/progress-chart/ProgressChart.component";
 import TotalCountChart from "../../../components/charts/total-count-chart/TotalCountChart.component";
+import WebMap from "../../../components/web-map/WebMap.component";
 import HideButton from "../../../components/buttons/hide-button/HideButton.component";
 
 import { BarChartObj } from "../../../models";
@@ -36,6 +37,14 @@ const MainDisplay: FC = () => {
 
   return (
     <MainDisplayContainer>
+      <Item>
+        <WebMap
+          chartType="barChart"
+          width={800}
+          height={350}
+          updateFunction={(func) => {}}
+        />
+      </Item>
       <Item>
         <ProgressChart
           width={800}

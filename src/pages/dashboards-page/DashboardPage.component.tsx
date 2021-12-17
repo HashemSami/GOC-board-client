@@ -12,12 +12,15 @@ import { Switch, Route, Redirect } from "react-router-dom";
 
 import MainDisplay from "./main-display/MainDisplay.component";
 import DashboardSideNav from "../../components/navs/side-nav/dashbord-side-nav/DashboardSideNav.component";
+import SideNav from "../../components/navs/side-nav/SideNav.component";
 
 const DashboardPage: FC = () => {
   const match = useRouteMatch();
   return (
     <DashboardPageContainer>
-      <DashboardSideNav />
+      <SideNav>
+        <DashboardSideNav />
+      </SideNav>
       <SideNavDiv />
       <Switch>
         <Route path={`${match.path}/maindisplay`}>
